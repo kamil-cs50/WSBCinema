@@ -96,7 +96,19 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(self.reservation_tab, "Rezerwacje")  # Dodaję widok rezerwacji jako zakładkę o nazwie "Rezerwacje".
         
         # Dodaję widget zakładek bezpośrednio do głównego układu
-        self.layout.addWidget(self.tabs) 
+        self.layout.addWidget(self.tabs)
+        
+        # Podłączam sygnał screening_selected z ScreeningView do slotu w MainWindow
+        self.screening_tab.screening_selected.connect(self.handle_screening_selected) # Podłączam sygnał emisji wybranego seansu do metody obsługującej w MainWindow.
+    
+    def handle_screening_selected(self, screening):
+        """
+        Slot wywoływany po wybraniu seansu w zakładce Seanse.
+        Przekazuje wybrany seans do widoku rezerwacji i przełącza zakładkę.
+        """
+        print(f"MainWindow odebrało wybrany seans: {screening}") # Log: Potwierdzenie odebrania sygnału i obiektu seansu.
+        self.reservation_tab.set_screening(screening) # Przekazuję wybrany obiekt seansu do metody set_screening w widoku rezerwacji.
+        self.tabs.setCurrentWidget(self.reservation_tab) # Ustawiam aktywną zakładkę na zakładkę rezerwacji.
 
     def setup_styles(self):
         """

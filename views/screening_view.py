@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QListWidget, QPushButton, QCalendarWidget, QHBoxLayout, QMessageBox # Importuję niezbędne klasy z modułu QtWidgets, dodaję QMessageBox.
-from PyQt5.QtCore import QDate, Qt # Importuję klasy QDate (do obsługi daty) i Qt (do wyrównania) z modułu QtCore.
+from PyQt5.QtCore import QDate, Qt, pyqtSignal # Importuję klasy QDate (do obsługi daty), Qt (do wyrównania) i pyqtSignal (do definiowania sygnałów) z modułu QtCore.
 from utils.database import Database # Importuję klasę Database do pobierania danych o seansach.
 
 class ScreeningView(QWidget):
@@ -7,6 +7,10 @@ class ScreeningView(QWidget):
     Widok do przeglądania seansów.
     Umożliwia wybór daty i wyświetlenie listy seansów dostępnych w tym dniu.
     """
+    
+    
+    # Definiuję sygnał, który będzie emitowany po wybraniu seansu. Sygnał ten będzie przekazywał obiekt Seansu.
+    screening_selected = pyqtSignal(object)
     
     def __init__(self):
         """
@@ -127,9 +131,10 @@ class ScreeningView(QWidget):
         """
         if self.selected_screening: # Sprawdzam, czy jakiś seans został wybrany.
             print(f"Wybrano seans: {self.selected_screening}") # Tymczasowy print.
-            # Tutaj powinien być sygnał do głównego okna, aby przejść do widoku rezerwacji dla tego seansu.
+            # Emituję sygnał screening_selected, przekazując wybrany obiekt seansu.
+            self.screening_selected.emit(self.selected_screening)
             # Na potrzeby demonstracji, można wyświetlić komunikat.
-            QMessageBox.information(self, "Wybrano seans", f"Wybrano seans: {self.selected_screening}")
+            # QMessageBox.information(self, "Wybrano seans", f"Wybrano seans: {self.selected_screening}") # Komunikat informacyjny usunięto, aby nie blokował aplikacji po wybraniu seansu.
             # TODO: Emitować sygnał do MainWindow z wybranym seansem, aby przełączyć widok na ReservationView.
         else:
              QMessageBox.warning(self, "Błąd", "Proszę wybrać seans z listy.") # Wyświetlam komunikat ostrzegawczy, jeśli żaden seans nie został wybrany.
