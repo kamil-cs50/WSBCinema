@@ -28,7 +28,11 @@ def load_sample_data():
     halls = [
         CinemaHall("Sala 1", 8, 10),  # Tworzę salę 1 (8 rzędów, 10 miejsc w rzędzie)
         CinemaHall("Sala 2", 10, 12),  # Tworzę salę 2 (10 rzędów, 12 miejsc w rzędzie)
+<<<<<<< HEAD
+        CinemaHall("Sala VIP", 6, 8),  # Tworzę salę VIP (5 rzędów, 8 miejsc w rzędzie, miejsca w tej sali mogą być droższe)
+=======
         CinemaHall("Sala VIP", 5, 8),  # Tworzę salę VIP (5 rzędów, 8 miejsc w rzędzie, miejsca w tej sali mogą być droższe)
+>>>>>>> 9a55c3f4adcd73157f37c8ec4be29a59581bd2f8
     ]
     
     for hall in halls:

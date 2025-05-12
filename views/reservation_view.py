@@ -103,6 +103,33 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
 
             # Dodaję przycisk miejsca do układu siatki, używając numeru rzędu i miejsca jako koordynatów.
             # Używam (seat.row - 1) i (seat.number - 1), ponieważ QGridLayout używa indeksów od 0.
+<<<<<<< HEAD
+            # Place button in its natural column index
+            col_index = seat.number - 1 # 0-based index
+            self.seat_layout.addWidget(seat_button, seat.row - 1, col_index) # Add button at its original column index
+ 
+        # Dodaję etykiety rzędów i miejsc do siatki dla lepszej czytelności.
+        for row in range(self.current_screening.cinema_hall.rows):  # Iteruję przez liczbę rzędów w sali kinowej.
+            row_label = QLabel(f"Rząd {row + 1}")  # Tworzę etykietę z numerem rzędu.
+            row_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)  # Wyrównuję tekst etykiety do lewej i środka w pionie.
+            row_label.setContentsMargins(10, 0, 0, 0)  # Dodaję margines po lewej stronie, aby odsunąć etykietę od miejsc.
+            self.seat_layout.addWidget(row_label, row, self.current_screening.cinema_hall.seats_per_row)  # Dodaję etykietę w kolumnie tuż za ostatnim miejscem w rzędzie.
+
+        # Add a fixed minimum width for the gap column for middle
+        middle = self.current_screening.cinema_hall.rows // 2 # Calculate middle column index
+        self.seat_layout.setColumnMinimumWidth(int(middle), 60) # Set minimum width for the gap column
+
+        # Dodaję etykiety miejsc do siatki dla lepszej czytelności.
+        max_seat_num = self.current_screening.cinema_hall.seats_per_row
+        for seat_num_idx in range(max_seat_num):  # Iterate using 0-based index
+            seat_num = seat_num_idx + 1 # Actual seat number (1-based)
+            col_label = QLabel(f"M {seat_num}")  # Create label e.g., "M 7"
+            col_label.setAlignment(Qt.AlignCenter)  # Center align label text
+
+            # Place label in its natural column index
+            col_index = seat_num_idx # 0-based index
+            self.seat_layout.addWidget(col_label, self.current_screening.cinema_hall.rows, col_index)  # Add label at its original column index
+=======
             self.seat_layout.addWidget(seat_button, seat.row - 1, seat.number - 1) # Dodaję utworzony przycisk miejsca (seat_button) do układu siatki (self.seat_layout) w pozycji określonej przez numer rzędu i numer miejsca (z uwzględnieniem indeksowania od 0).
  
         # Dodaję etykiety rzędów i miejsc do siatki dla lepszej czytelności.
@@ -115,6 +142,7 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
             col_label = QLabel(f"M {col + 1}") # Tworzę instancję QLabel (etykieta) z tekstem "M X", gdzie X to numer miejsca w rzędzie (col + 1, ponieważ miejsca są numerowane od 1).
             col_label.setAlignment(Qt.AlignCenter) # Wyrównuję tekst etykiety miejsca do środka.
             self.seat_layout.addWidget(col_label, self.current_screening.cinema_hall.rows, col) # Dodaję utworzoną etykietę miejsca do układu siatki w rzędzie poniżej ostatniego rzędu (self.current_screening.cinema_hall.rows) i odpowiedniej kolumnie (col).
+>>>>>>> 9a55c3f4adcd73157f37c8ec4be29a59581bd2f8
 
  
     def clear_seat_layout(self): # Definiuję metodę clear_seat_layout, która usuwa wszystkie widgety (przyciski miejsc i etykiety) z układu siatki planu sali.
@@ -129,6 +157,14 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
             if widget is not None: # Sprawdzam warunek: jeśli pobrany element zawiera widget (widget nie jest None).
                 widget.deleteLater() # Planuję usunięcie widgetu. deleteLater() jest bezpieczniejszą metodą w PyQt, ponieważ odkłada usunięcie widgetu do momentu, gdy pętla zdarzeń Qt będzie gotowa, zapobiegając potencjalnym problemom z dostępem do usuwanego widgetu.
             # Else: Element może być tylko układem (layout), w takim przypadku nie ma widgetu do usunięcia, więc nie robimy nic więcej.
+<<<<<<< HEAD
+        
+        # Resetuj minimalną szerokość kolumn (usuwa padding dodany dla środkowej przerwy)
+        for col in range(self.seat_layout.columnCount()):
+            self.seat_layout.setColumnMinimumWidth(col, 0)
+            
+=======
+>>>>>>> 9a55c3f4adcd73157f37c8ec4be29a59581bd2f8
 
     def toggle_seat_selection(self): # Definiuję metodę toggle_seat_selection, która jest slotem wywoływanym po kliknięciu przycisku reprezentującego wolne miejsce.
         """
