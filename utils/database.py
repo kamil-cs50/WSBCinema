@@ -5,6 +5,7 @@ from models.reservation import Reservation # Importuję klasę Reservation, poni
 from models.movie import Movie
 from models.cinema_hall import CinemaHall
 from models.screening import Screening
+from states.seat_state import FreeSeatState
 
 class Database:
     """
@@ -148,7 +149,7 @@ class Database:
             
             # Tworzę nową listę rezerwacji, deserializując każdy słownik za pomocą metody from_dict().
             # Przekazuję aktualną listę seansów, aby metoda from_dict mogła odtworzyć powiązania z seansami.
-            self.reservations = [Reservation.from_dict(data, self.screenings) for data in reservations_data if Reservation.from_dict(data, self.screenings) is not None]
+            self.reservations = [Reservation.from_dict(data, self) for data in reservations_data if Reservation.from_dict(data, self) is not None]
             # Wyświetlam komunikat potwierdzający wczytanie.
             print(f"Wczytano {len(self.reservations)} rezerwacji z {filepath}")
         except json.JSONDecodeError as e:
@@ -157,3 +158,19 @@ class Database:
         except IOError as e:
             # W przypadku błędu wejścia/wyjścia, wyświetlam komunikat o błędzie.
             print(f"Błąd odczytu rezerwacji z {filepath}: {e}")
+
+    def find_screening(self, movie_title, hall_name, date_time):
+        """
+        Znajduje seans na podstawie tytułu filmu, nazwy sali i daty/czasu.
+        """
+        for screening in self.screenings:
+            if (screening.movie.title == movie_title and
+                screening.cinema_hall.name == hall_name and
+                screening.date_time == date_time):
+                return screening
+        return None
+
+    def reset_all_seats(self):
+        for screening in self.screenings:
+            for seat in screening.seats:
+                seat.state = FreeSeatState()

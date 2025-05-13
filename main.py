@@ -28,11 +28,7 @@ def load_sample_data():
     halls = [
         CinemaHall("Sala 1", 8, 10),  # Tworzę salę 1 (8 rzędów, 10 miejsc w rzędzie)
         CinemaHall("Sala 2", 10, 12),  # Tworzę salę 2 (10 rzędów, 12 miejsc w rzędzie)
-<<<<<<< HEAD
         CinemaHall("Sala VIP", 6, 8),  # Tworzę salę VIP (5 rzędów, 8 miejsc w rzędzie, miejsca w tej sali mogą być droższe)
-=======
-        CinemaHall("Sala VIP", 5, 8),  # Tworzę salę VIP (5 rzędów, 8 miejsc w rzędzie, miejsca w tej sali mogą być droższe)
->>>>>>> 9a55c3f4adcd73157f37c8ec4be29a59581bd2f8
     ]
     
     for hall in halls:
@@ -80,19 +76,20 @@ def load_sample_data():
 
 def main():
     """Główna funkcja aplikacji, punkt wejścia"""
-    db = Database() # Pobieram instancję bazy danych (Singleton)
-    db.load_reservations("reservations.json") # Wczytuję istniejące rezerwacje z pliku JSON przy starcie
+    db = Database()  # Pobieram instancję bazy danych (Singleton)
 
-    load_sample_data()  # Ładuję przykładowe dane do bazy danych
+    load_sample_data()  # Najpierw ładuję przykładowe dane (filmy, sale, seanse)
+    db.reset_all_seats()  # Dodaj to tutaj!
+    db.load_reservations("reservations.json")  # Dopiero potem wczytuję rezerwacje
 
-    app = QApplication(sys.argv)  # Tworzę instancję aplikacji Qt, przekazując argumenty wiersza poleceń
-    window = MainWindow()  # Tworzę główne okno aplikacji, które jest widokiem GUI
-    window.show()  # Wyświetlam główne okno aplikacji
-    
-    # Zapewniam, że rezerwacje zostaną zapisane przed zamknięciem aplikacji
-    app.aboutToQuit.connect(lambda: db.save_reservations("reservations.json")) 
-    
-    sys.exit(app.exec_())  # Uruchamiam pętlę zdarzeń aplikacji Qt i zwracam kod zakończenia
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    app.aboutToQuit.connect(lambda: db.save_reservations("reservations.json"))
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()  # Uruchamiam funkcję main() tylko gdy skrypt jest wykonywany bezpośrednio (nie jest importowany jako moduł)
+
+for seat in seats:
+    seat.reserve()

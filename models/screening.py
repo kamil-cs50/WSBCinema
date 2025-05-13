@@ -28,6 +28,8 @@ class Screening:
         for row in range(1, self.cinema_hall.rows + 1):  # Iteruję przez każdy rząd w sali kinowej (od 1 do liczby rzędów).
             for seat_num in range(1, self.cinema_hall.seats_per_row + 1):  # Iteruję przez każde miejsce w danym rzędzie (od 1 do liczby miejsc w rzędzie).
                 seats.append(Seat(row, seat_num))  # Tworzę nowy obiekt Seat z numerem rzędu i miejsca i dodaję go do listy 'seats'.
+        for seat in seats:
+            seat.reserve()  # Usuń argument None
         return seats  # Zwracam listę wszystkich utworzonych obiektów Seat.
     
     def get_available_seats(self):
@@ -49,6 +51,12 @@ class Screening:
             if seat.row == row and seat.number == number:
                 return seat  # Jeśli znajdę pasujące miejsce, zwracam ten obiekt Seat.
         return None  # Jeśli żadne miejsce nie pasuje, zwracam None.
+    
+    def get_seat(self, row, number):
+        """
+        Alias do find_seat – zwraca obiekt Seat o podanym rzędzie i numerze.
+        """
+        return self.find_seat(row, number)
     
     def __str__(self):
         """

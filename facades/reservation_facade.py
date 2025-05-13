@@ -1,7 +1,7 @@
 from utils.database import Database  # Importuję klasę Database, która jest Singletonem przechowującym dane (fasada będzie z niej korzystać).
 from models.reservation import Reservation  # Importuję klasę Reservation, ponieważ fasada będzie tworzyć obiekty tego typu.
 from models.seat import Seat  # Importuję klasę Seat, ponieważ fasada będzie operować na miejscach.
-from factories.ticket_factory import TicketFactory # Importuję klasę bazową TicketFactory, ponieważ fasada będzie używać fabryk do tworzenia biletów.
+from factories.ticket_factory import TicketFactory, RegularTicketFactory, DiscountedTicketFactory, VIPTicketFactory # Importuję konkretne fabryki biletów.
 
 class ReservationFacade:
     """
@@ -77,3 +77,20 @@ class ReservationFacade:
         Metoda fasady, która deleguje zapytanie o wszystkie rezerwacje do bazy danych.
         """
         return self.database.get_reservations() # Wywołuję metodę get_reservations() na obiekcie bazy danych i zwracam jej wynik.
+
+    def get_available_ticket_options(self, screening):
+        """
+        Zwraca słownik dostępnych opcji biletów (nazwa typu biletu jako klucz, fabryka jako wartość)
+        dla danego seansu, w zależności od sali kinowej.
+        """
+        hall_name = screening.cinema_hall.name
+        options = {}
+
+        if hall_name == "Sala 1" or hall_name == "Sala 2":
+            options["Normalny"] = RegularTicketFactory()
+            options["Ulgowy"] = DiscountedTicketFactory()
+        elif hall_name == "Sala VIP":
+            options["VIP"] = VIPTicketFactory()
+        # Można dodać domyślną obsługę lub zgłaszanie błędu, jeśli nazwa sali nie pasuje
+        
+        return options

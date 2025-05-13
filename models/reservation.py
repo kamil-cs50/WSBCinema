@@ -97,7 +97,7 @@ class Reservation:
 
             # Ważne: Aktualizujemy stan miejsc w odtworzonym seansie na "zarezerwowane"
             for seat in seats:
-                seat.reserve(None) # Przekazujemy None jako obserwatora, bo nie potrzebujemy aktualizacji GUI przy wczytywaniu
+                seat.reserve()  # Wywołaj bez argumentów!
 
             return reservation
         except KeyError as e:
