@@ -164,107 +164,7 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
             seat_button.setFixedSize(40, 40) # Ustawiam stały rozmiar przycisku miejsca na 40 pikseli szerokości i 40 pikseli wysokości.
             seat_button.setProperty("seat_obj", seat) # Zapisuję referencję do oryginalnego obiektu Seat jako właściwość przycisku o nazwie "seat_obj". Pozwala to na łatwy dostęp do obiektu Seat z przycisku.
             
-            # Ustawiam styl przycisku w zależności            from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout, QMessageBox, QDialog, QLineEdit, QComboBox, QInputDialog, QDialogButtonBox, QFrame
-            
-            class ReservationView(QWidget):
-                # ...existing code...
-            
-                def __init__(self):
-                    super().__init__()
-                    # Zmień główny layout na poziomy
-                    self.main_layout = QHBoxLayout(self)
-                    self.setLayout(self.main_layout)
-            
-                    # Lewa kolumna: dotychczasowy pionowy layout
-                    self.left_layout = QVBoxLayout()
-                    self.main_layout.addLayout(self.left_layout, stretch=1)
-            
-                    self.database = Database()
-                    self.reservation_facade = ReservationFacade()
-                    self.current_screening = None
-                    self.selected_seats = []
-                    self.available_ticket_factories = {}
-            
-                    self.screening_info_label = QLabel("Proszę wybrać seans z zakładki 'Seanse'.")
-                    self.left_layout.addWidget(self.screening_info_label)
-            
-                    self.seat_layout = QGridLayout()
-                    self.left_layout.addLayout(self.seat_layout)
-            
-                    self.price_label = QLabel("Łączna cena: 0.00 zł")
-                    self.left_layout.addWidget(self.price_label)
-            
-                    self.ticket_type_combo = QComboBox()
-                    self.ticket_type_combo.currentIndexChanged.connect(self.update_price)
-                    self.left_layout.addWidget(self.ticket_type_combo)
-            
-                    self.reserve_button = QPushButton("Zarezerwuj")
-                    self.reserve_button.setEnabled(False)
-                    self.reserve_button.clicked.connect(self.make_reservation)
-                    self.left_layout.addWidget(self.reserve_button)
-            
-                    self.left_layout.addStretch()
-            
-                    # Prawa kolumna: miejsce na legendę
-                    self.legend_layout = QVBoxLayout()
-                    self.legend_layout.addStretch()  # Legenda będzie przyklejona do góry
-                    self.main_layout.addLayout(self.legend_layout)
-            
-                    self.legend_widget = None
-            
-                def display_seat_layout(self):
-                    self.clear_seat_layout()
-            
-                    # --- LEGENDA KOLORÓW MIEJSC ---
-                    # Usuń starą legendę jeśli istnieje
-                    if self.legend_widget is not None:
-                        self.legend_layout.removeWidget(self.legend_widget)
-                        self.legend_widget.deleteLater()
-                        self.legend_widget = None
-            
-                    legend_widget = QWidget()
-                    legend_vbox = QVBoxLayout(legend_widget)
-                    legend_vbox.setContentsMargins(20, 40, 20, 0)
-                    legend_vbox.setSpacing(20)
-            
-                    # Lightgreen - wolne
-                    free_box = QFrame()
-                    free_box.setFixedSize(20, 20)
-                    free_box.setStyleSheet("background-color: lightgreen; border: 1px solid #888;")
-                    free_label = QLabel("Wolne")
-                    free_label.setStyleSheet("color: white;")
-                    row1 = QHBoxLayout()
-                    row1.addWidget(free_box)
-                    row1.addWidget(free_label)
-                    legend_vbox.addLayout(row1)
-            
-                    # Orange - zarezerwowane
-                    reserved_box = QFrame()
-                    reserved_box.setFixedSize(20, 20)
-                    reserved_box.setStyleSheet("background-color: orange; border: 1px solid #888;")
-                    reserved_label = QLabel("Zarezerwowane")
-                    reserved_label.setStyleSheet("color: white;")
-                    row2 = QHBoxLayout()
-                    row2.addWidget(reserved_box)
-                    row2.addWidget(reserved_label)
-                    legend_vbox.addLayout(row2)
-            
-                    # Red - sprzedane
-                    sold_box = QFrame()
-                    sold_box.setFixedSize(20, 20)
-                    sold_box.setStyleSheet("background-color: red; border: 1px solid #888;")
-                    sold_label = QLabel("Sprzedane")
-                    sold_label.setStyleSheet("color: white;")
-                    row3 = QHBoxLayout()
-                    row3.addWidget(sold_box)
-                    row3.addWidget(sold_label)
-                    legend_vbox.addLayout(row3)
-            
-                    legend_widget.setLayout(legend_vbox)
-                    self.legend_layout.insertWidget(0, legend_widget)
-                    self.legend_widget = legend_widget
-            
-                    # ...reszta kodu display_seat_layout... od stanu miejsca.
+            # Ustawiam styl przycisku w zależności od stanu miejsca.
             if seat.state.__class__.__name__ == "FreeSeatState": # Sprawdzam, czy aktualny stan miejsca jest instancją klasy FreeSeatState (wolne).
                 seat_button.setStyleSheet("background-color: lightgreen;") # Jeśli miejsce jest wolne, ustawiam kolor tła przycisku na jasnozielony za pomocą stylów CSS.
                 seat_button.clicked.connect(self.toggle_seat_selection) # Podpinam sygnał 'clicked' przycisku do metody self.toggle_seat_selection. Oznacza to, że kliknięcie wolnego miejsca wywoła tę metodę w celu wyboru/odznaczenia miejsca.
@@ -455,16 +355,42 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
                 try:
                     reservation = self.reservation_facade.make_reservation(customer_name, self.current_screening, self.selected_seats, tickets)
                     
-                    QMessageBox.information(self, "Sukces", "Sukces, udało Ci się zarezerwować bilet/y")
-                    
+                    msg_box = QMessageBox(self)
+                    msg_box.setIcon(QMessageBox.Information)
+                    msg_box.setWindowTitle("Sukces")
+                    msg_box.setText("Sukces! Udało Ci się zarezerwować bilet/y.")
+                    msg_box.setStyleSheet("""
+                        QLabel {
+                            color: black; /* Czarny kolor tekstu */
+                            font-size: 12pt; /* Rozmiar czcionki */
+                        }
+                        QMessageBox {
+                            background-color: white; /* Białe tło okna */
+                        }
+                        QPushButton {
+                            color: white;
+                            background-color: #007bff; /* Niebieskie przyciski */
+                            border: 1px solid #007bff;
+                            padding: 5px 10px;
+                            border-radius: 3px;
+                        }
+                        QPushButton:hover {
+                            background-color: #0056b3; /* Ciemniejszy niebieski po najechaniu */
+                        }
+                        QPushButton:pressed {
+                            background-color: #004085; /* Jeszcze ciemniejszy niebieski po kliknięciu */
+                        }
+                    """)
+                    msg_box.exec_()
+
                     self.selected_seats = []
                     self.display_seat_layout()
                     self.update_price()
                     self.reserve_button.setEnabled(False)
                     self.reservation_made.emit()
-     
+
                 except Exception as e:
-                     QMessageBox.critical(self, "Błąd rezerwacji", f"Wystąpił błąd podczas rezerwacji: {e}")
+                    QMessageBox.critical(self, "Błąd rezerwacji", f"Wystąpił błąd podczas rezerwacji: {e}")
             # else: User cancelled the summary dialog, do nothing further.
 
         elif ok:
