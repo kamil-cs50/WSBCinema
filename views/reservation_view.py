@@ -106,7 +106,7 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
                 seat_button.setStyleSheet("background-color: lightgreen;") # Jeśli miejsce jest wolne, ustawiam kolor tła przycisku na jasnozielony za pomocą stylów CSS.
                 seat_button.clicked.connect(self.toggle_seat_selection) # Podpinam sygnał 'clicked' przycisku do metody self.toggle_seat_selection. Oznacza to, że kliknięcie wolnego miejsca wywoła tę metodę w celu wyboru/odznaczenia miejsca.
             elif seat.state.__class__.__name__ == "ReservedSeatState": # Sprawdzam, czy aktualny stan miejsca jest instancją klasy ReservedSeatState (zarezerwowane).
-                 seat_button.setStyleSheet("background-color: yellow;") # Jeśli miejsce jest zarezerwowane, ustawiam kolor tła przycisku na żółty.
+                 seat_button.setStyleSheet("background-color: orange;") # Jeśli miejsce jest zarezerwowane, ustawiam kolor tła przycisku na żółty.
                  seat_button.setEnabled(False) # Wyłączam przycisk dla zarezerwowanych miejsc, aby nie można ich było wybrać.
             elif seat.state.__class__.__name__ == "SoldSeatState": # Sprawdzam, czy aktualny stan miejsca jest instancją klasy SoldSeatState (sprzedane).
                 seat_button.setStyleSheet("background-color: red;") # Jeśli miejsce jest sprzedane, ustawiam kolor tła przycisku na czerwony.

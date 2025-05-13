@@ -84,7 +84,7 @@ def main():
 
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.show()
+    window.showMaximized()
     app.aboutToQuit.connect(lambda: db.save_reservations("reservations.json"))
     sys.exit(app.exec_())
 

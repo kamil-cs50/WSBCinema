@@ -1,0 +1,417 @@
+[
+    {
+        "id": "69ce63e6-c013-41f0-989e-8ecd1aea3fdd",
+        "customer_name": "Jan Byk",
+        "movie_title": "Everything Everywhere All at Once",
+        "hall_name": "Sala 2",
+        "date_time": "2025-05-16T15:30:00",
+        "seats": [
+            {
+                "row": 5,
+                "number": 5
+            },
+            {
+                "row": 5,
+                "number": 6
+            },
+            {
+                "row": 5,
+                "number": 7
+            },
+            {
+                "row": 5,
+                "number": 8
+            },
+            {
+                "row": 5,
+                "number": 9
+            },
+            {
+                "row": 5,
+                "number": 10
+            }
+        ],
+        "total_price": 150,
+        "timestamp": "2025-05-13T10:27:06.114520"
+    },
+    {
+        "id": "ec09b1f7-d01c-4a11-bcf4-f080cf17f600",
+        "customer_name": "Karol Turek",
+        "movie_title": "Oppenheimer",
+        "hall_name": "Sala 1",
+        "date_time": "2025-05-15T10:00:00",
+        "seats": [
+            {
+                "row": 5,
+                "number": 8
+            },
+            {
+                "row": 5,
+                "number": 7
+            },
+            {
+                "row": 5,
+                "number": 5
+            },
+            {
+                "row": 5,
+                "number": 4
+            },
+            {
+                "row": 5,
+                "number": 6
+            },
+            {
+                "row": 5,
+                "number": 3
+            }
+        ],
+        "total_price": 84.0,
+        "timestamp": "2025-05-13T10:27:25.162525"
+    },
+    {
+        "id": "d2efdf6b-7366-4197-b317-403789f4066c",
+        "customer_name": "Anakin Skywalker",
+        "movie_title": "CODA",
+        "hall_name": "Sala VIP",
+        "date_time": "2025-05-15T20:00:00",
+        "seats": [
+            {
+                "row": 5,
+                "number": 6
+            },
+            {
+                "row": 5,
+                "number": 5
+            },
+            {
+                "row": 5,
+                "number": 4
+            },
+            {
+                "row": 5,
+                "number": 3
+            },
+            {
+                "row": 4,
+                "number": 1
+            },
+            {
+                "row": 4,
+                "number": 2
+            }
+        ],
+        "total_price": 270.0,
+        "timestamp": "2025-05-13T10:27:42.114223"
+    },
+    {
+        "id": "2d09a311-08a7-473e-930e-7988e5349e03",
+        "customer_name": "Joanna Nowak",
+        "movie_title": "Everything Everywhere All at Once",
+        "hall_name": "Sala 2",
+        "date_time": "2025-05-17T15:30:00",
+        "seats": [
+            {
+                "row": 5,
+                "number": 4
+            },
+            {
+                "row": 5,
+                "number": 5
+            },
+            {
+                "row": 5,
+                "number": 6
+            },
+            {
+                "row": 5,
+                "number": 7
+            },
+            {
+                "row": 5,
+                "number": 8
+            },
+            {
+                "row": 5,
+                "number": 9
+            },
+            {
+                "row": 8,
+                "number": 10
+            },
+            {
+                "row": 8,
+                "number": 9
+            },
+            {
+                "row": 9,
+                "number": 3
+            },
+            {
+                "row": 9,
+                "number": 4
+            },
+            {
+                "row": 9,
+                "number": 7
+            },
+            {
+                "row": 9,
+                "number": 8
+            },
+            {
+                "row": 7,
+                "number": 6
+            },
+            {
+                "row": 7,
+                "number": 5
+            },
+            {
+                "row": 3,
+                "number": 1
+            },
+            {
+                "row": 3,
+                "number": 2
+            },
+            {
+                "row": 2,
+                "number": 4
+            },
+            {
+                "row": 2,
+                "number": 5
+            },
+            {
+                "row": 7,
+                "number": 2
+            },
+            {
+                "row": 7,
+                "number": 1
+            },
+            {
+                "row": 10,
+                "number": 1
+            },
+            {
+                "row": 10,
+                "number": 2
+            },
+            {
+                "row": 9,
+                "number": 2
+            },
+            {
+                "row": 9,
+                "number": 1
+            },
+            {
+                "row": 6,
+                "number": 9
+            },
+            {
+                "row": 6,
+                "number": 8
+            },
+            {
+                "row": 6,
+                "number": 7
+            },
+            {
+                "row": 6,
+                "number": 6
+            },
+            {
+                "row": 6,
+                "number": 4
+            },
+            {
+                "row": 6,
+                "number": 3
+            },
+            {
+                "row": 2,
+                "number": 8
+            },
+            {
+                "row": 2,
+                "number": 7
+            },
+            {
+                "row": 3,
+                "number": 7
+            },
+            {
+                "row": 3,
+                "number": 8
+            },
+            {
+                "row": 3,
+                "number": 10
+            },
+            {
+                "row": 3,
+                "number": 9
+            },
+            {
+                "row": 3,
+                "number": 11
+            },
+            {
+                "row": 3,
+                "number": 12
+            },
+            {
+                "row": 10,
+                "number": 7
+            },
+            {
+                "row": 10,
+                "number": 8
+            },
+            {
+                "row": 10,
+                "number": 10
+            },
+            {
+                "row": 10,
+                "number": 11
+            }
+        ],
+        "total_price": 1050,
+        "timestamp": "2025-05-13T10:28:36.795469"
+    },
+    {
+        "id": "610e0f0e-ee65-412d-8e61-5220a8c2d735",
+        "customer_name": "Darek Koral",
+        "movie_title": "Everything Everywhere All at Once",
+        "hall_name": "Sala 2",
+        "date_time": "2025-05-15T15:30:00",
+        "seats": [
+            {
+                "row": 5,
+                "number": 5
+            },
+            {
+                "row": 5,
+                "number": 6
+            },
+            {
+                "row": 5,
+                "number": 7
+            },
+            {
+                "row": 5,
+                "number": 8
+            },
+            {
+                "row": 5,
+                "number": 9
+            },
+            {
+                "row": 5,
+                "number": 10
+            },
+            {
+                "row": 6,
+                "number": 10
+            },
+            {
+                "row": 6,
+                "number": 9
+            },
+            {
+                "row": 6,
+                "number": 8
+            },
+            {
+                "row": 6,
+                "number": 7
+            },
+            {
+                "row": 6,
+                "number": 6
+            },
+            {
+                "row": 6,
+                "number": 5
+            },
+            {
+                "row": 6,
+                "number": 4
+            },
+            {
+                "row": 6,
+                "number": 3
+            },
+            {
+                "row": 6,
+                "number": 2
+            },
+            {
+                "row": 6,
+                "number": 1
+            },
+            {
+                "row": 5,
+                "number": 1
+            },
+            {
+                "row": 5,
+                "number": 2
+            },
+            {
+                "row": 8,
+                "number": 3
+            },
+            {
+                "row": 8,
+                "number": 4
+            },
+            {
+                "row": 7,
+                "number": 4
+            },
+            {
+                "row": 7,
+                "number": 3
+            },
+            {
+                "row": 9,
+                "number": 7
+            },
+            {
+                "row": 9,
+                "number": 8
+            },
+            {
+                "row": 3,
+                "number": 9
+            },
+            {
+                "row": 3,
+                "number": 8
+            },
+            {
+                "row": 4,
+                "number": 8
+            },
+            {
+                "row": 4,
+                "number": 7
+            },
+            {
+                "row": 4,
+                "number": 6
+            },
+            {
+                "row": 4,
+                "number": 5
+            }
+        ],
+        "total_price": 525.0,
+        "timestamp": "2025-05-13T10:49:48.786497"
+    }
+]
