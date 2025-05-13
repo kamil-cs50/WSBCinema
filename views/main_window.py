@@ -164,3 +164,14 @@ class MainWindow(QMainWindow):
                 color: white; /* Kolor tekstu na biały. */
             }
         """)  # Stosuję zdefiniowany arkusz stylów do głównego okna i jego elementów.
+        
+        self.tabs.setStyleSheet("""
+            QTabBar::tab {
+                min-width: 120px;
+                padding: 8px 24px;
+                font-weight: normal;
+            }
+            QTabBar::tab:selected {
+                font-weight: bold;
+            }
+        """)

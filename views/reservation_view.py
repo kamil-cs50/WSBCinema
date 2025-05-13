@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QGridLayout, QMessageBox, QDialog, QLineEdit, QComboBox, QInputDialog, QDialogButtonBox # Importuję niezbędne klasy z modułu QtWidgets do tworzenia elementów GUI, takich jak widget bazowy (QWidget), układy (QVBoxLayout, QGridLayout), etykiety (QLabel), przyciski (QPushButton), okna dialogowe (QMessageBox, QDialog, QInputDialog), pola tekstowe (QLineEdit) i listy rozwijane (QComboBox). Dodano import QInputDialog dla okna dialogowego pobierającego dane tekstowe. Dodano QDialogButtonBox.
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout, QMessageBox, QDialog, QLineEdit, QComboBox, QInputDialog, QDialogButtonBox, QFrame # Importuję niezbędne klasy z modułu QtWidgets do tworzenia elementów GUI, takich jak widget bazowy (QWidget), układy (QVBoxLayout, QGridLayout), etykiety (QLabel), przyciski (QPushButton), okna dialogowe (QMessageBox, QDialog, QInputDialog), pola tekstowe (QLineEdit) i listy rozwijane (QComboBox). Dodano import QInputDialog dla okna dialogowego pobierającego dane tekstowe. Dodano QDialogButtonBox.
 from PyQt5.QtCore import Qt, pyqtSignal # Importuję klasy Qt z modułu QtCore (do obsługi flag i wyrównania) oraz pyqtSignal do definiowania niestandardowych sygnałów w klasach QObject (QWidget dziedziczy po QObject).
 from utils.database import Database # Importuję klasę Database z modułu utils, która służy jako repozytorium danych (Singleton).
 from facades.reservation_facade import ReservationFacade # Importuję klasę ReservationFacade z modułu facades, która implementuje wzorzec Fasady i upraszcza interfejs do złożonych operacji związanych z rezerwacją.
@@ -22,34 +22,48 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
         """
         super().__init__() # Wywołuję konstruktor klasy nadrzędnej QWidget. Jest to konieczne do poprawnej inicjalizacji widgetu PyQt5.
         
+        # Zmień główny layout na poziomy
+        self.main_layout = QHBoxLayout(self)
+        self.setLayout(self.main_layout)
+
+        # Lewa kolumna: dotychczasowy pionowy layout
+        self.left_layout = QVBoxLayout()
+        self.main_layout.addLayout(self.left_layout, stretch=1)
+
         self.database = Database() # Pobieram instancję bazy danych (Singleton) poprzez wywołanie klasy Database().
         self.reservation_facade = ReservationFacade() # Tworzę instancję fasady rezerwacji (ReservationFacade). Będę jej używał do wykonywania operacji na rezerwacjach.
         self.current_screening = None # Inicjalizuję atrybut self.current_screening na None. Będzie on przechowywał obiekt seansu, który aktualnie jest wybrany do rezerwacji.
         self.selected_seats = [] # Inicjalizuję pustą listę self.selected_seats. Będzie ona przechowywać obiekty Seat wybrane przez użytkownika do rezerwacji.
         self.available_ticket_factories = {} # Słownik przechowujący dostępne fabryki biletów dla bieżącego seansu.
         
-        self.layout = QVBoxLayout(self) # Tworzę główny pionowy układ (QVBoxLayout) dla tego widoku i ustawiam go jako layout dla bieżącego widgetu (self).
-        
         self.screening_info_label = QLabel("Proszę wybrać seans z zakładki 'Seanse'.") # Tworzę instancję QLabel (etykieta) wyświetlającą początkowy komunikat informujący o konieczności wyboru seansu.
-        self.layout.addWidget(self.screening_info_label) # Dodaję utworzoną etykietę do głównego pionowego układu.
+        self.left_layout.addWidget(self.screening_info_label) # Dodaję utworzoną etykietę do głównego pionowego układu.
         
         self.seat_layout = QGridLayout() # Tworzę układ siatki (QGridLayout) dla planu sali kinowej. Przyciski miejsc zostaną dodane do tego layoutu.
-        self.layout.addLayout(self.seat_layout) # Dodaję utworzony układ siatki do głównego pionowego układu.
+        self.left_layout.addLayout(self.seat_layout) # Dodaję utworzony układ siatki do głównego pionowego układu.
  
         self.price_label = QLabel("Łączna cena: 0.00 zł") # Tworzę etykietę wyświetlającą łączną cenę rezerwacji, początkowo ustawioną na 0.00 zł.
-        self.layout.addWidget(self.price_label) # Dodaję etykietę ceny do głównego pionowego układu.
+        self.left_layout.addWidget(self.price_label) # Dodaję etykietę ceny do głównego pionowego układu.
 
-        self.ticket_type_combo = QComboBox() # Tworzę instancję QComboBox (lista rozwijana) do wyboru typu biletu.
-        # Opcje biletów będą ładowane dynamicznie w set_screening
-        self.ticket_type_combo.currentIndexChanged.connect(self.update_price) # Podpinam sygnał 'currentIndexChanged' (zmiana wybranego elementu w liście rozwijanej) do metody self.update_price. Oznacza to, że metoda update_price zostanie wywołana za każdym razem, gdy użytkownik zmieni typ biletu.
-        self.layout.addWidget(self.ticket_type_combo) # Dodaję utworzoną listę rozwijaną do głównego pionowego układu.
+        self.ticket_type_combo = QComboBox()  # Tworzę instancję QComboBox (lista rozwijana) do wyboru typu biletu.
+        self.ticket_type_combo.setMaximumWidth(150)  # Ustawiam maksymalną szerokość na 150 pikseli.
+        self.ticket_type_combo.currentIndexChanged.connect(self.update_price)  # Podpinam sygnał 'currentIndexChanged'.
+        self.left_layout.addWidget(self.ticket_type_combo)  # Dodaję listę rozwijaną do układu.
+
+        self.reserve_button = QPushButton("Zarezerwuj")  # Tworzę przycisk "Zarezerwuj".
+        self.reserve_button.setMaximumWidth(150)  # Ustawiam maksymalną szerokość na 150 pikseli.
+        self.reserve_button.setEnabled(False)  # Domyślnie wyłączam przycisk.
+        self.reserve_button.clicked.connect(self.make_reservation)  # Podpinam sygnał 'clicked'.
+        self.left_layout.addWidget(self.reserve_button)  # Dodaję przycisk do układu.
         
-        self.reserve_button = QPushButton("Zarezerwuj") # Tworzę instancję QPushButton (przycisk) z tekstem "Zarezerwuj".
-        self.reserve_button.setEnabled(False) # Domyślnie wyłączam przycisk rezerwacji. Będzie aktywny tylko wtedy, gdy wybrano seans i miejsca.
-        self.reserve_button.clicked.connect(self.make_reservation) # Podpinam sygnał 'clicked' przycisku do metody self.make_reservation. Oznacza to, że metoda make_reservation zostanie wywołana, gdy przycisk zostanie kliknięty.
-        self.layout.addWidget(self.reserve_button) # Dodaję utworzony przycisk do głównego pionowego układu.
-        
-        self.layout.addStretch() # Dodaję rozciągliwy element (stretch) na końcu głównego układu pionowego. Powoduje to, że elementy powyżej są wyrównane do góry.
+        self.left_layout.addStretch() # Dodaję rozciągliwy element (stretch) na końcu głównego układu pionowego. Powoduje to, że elementy powyżej są wyrównane do góry.
+
+        # Prawa kolumna: miejsce na legendę
+        self.legend_layout = QVBoxLayout()
+        self.legend_layout.addStretch()  # Legenda będzie przyklejona do góry
+        self.main_layout.addLayout(self.legend_layout)
+
+        self.legend_widget = None
 
     def set_screening(self, screening): # Definiuję metodę set_screening, która jest slotem wywoływanym z innego widoku (np. ScreeningView) w celu ustawienia aktualnie wybranego seansu.
         """
@@ -92,6 +106,55 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
         """
         self.clear_seat_layout() # Najpierw wywołuję metodę clear_seat_layout, aby usunąć wszystkie istniejące przyciski miejsc z układu siatki przed wyświetleniem nowego planu sali.
 
+        # --- LEGENDA KOLORÓW MIEJSC ---
+        # Usuń starą legendę jeśli istnieje
+        if self.legend_widget is not None:
+            self.legend_layout.removeWidget(self.legend_widget)
+            self.legend_widget.deleteLater()
+            self.legend_widget = None
+
+        legend_widget = QWidget()
+        legend_vbox = QVBoxLayout(legend_widget)
+        legend_vbox.setContentsMargins(20, 40, 20, 0)
+        legend_vbox.setSpacing(20)
+
+        # Lightgreen - wolne
+        free_box = QFrame()
+        free_box.setFixedSize(20, 20)
+        free_box.setStyleSheet("background-color: lightgreen; border: 1px solid #888;")
+        free_label = QLabel("Wolne")
+        free_label.setStyleSheet("color: white;")
+        row1 = QHBoxLayout()
+        row1.addWidget(free_box)
+        row1.addWidget(free_label)
+        legend_vbox.addLayout(row1)
+
+        # Orange - zarezerwowane
+        reserved_box = QFrame()
+        reserved_box.setFixedSize(20, 20)
+        reserved_box.setStyleSheet("background-color: orange; border: 1px solid #888;")
+        reserved_label = QLabel("Zarezerwowane")
+        reserved_label.setStyleSheet("color: white;")
+        row2 = QHBoxLayout()
+        row2.addWidget(reserved_box)
+        row2.addWidget(reserved_label)
+        legend_vbox.addLayout(row2)
+
+        # Red - sprzedane
+        sold_box = QFrame()
+        sold_box.setFixedSize(20, 20)
+        sold_box.setStyleSheet("background-color: red; border: 1px solid #888;")
+        sold_label = QLabel("Sprzedane")
+        sold_label.setStyleSheet("color: white;")
+        row3 = QHBoxLayout()
+        row3.addWidget(sold_box)
+        row3.addWidget(sold_label)
+        legend_vbox.addLayout(row3)
+
+        legend_widget.setLayout(legend_vbox)
+        self.legend_layout.insertWidget(0, legend_widget)
+        self.legend_widget = legend_widget
+
         if not self.current_screening: # Sprawdzam warunek: jeśli nie ma aktualnie wybranego seansu (self.current_screening jest None).
             return # Jeśli nie ma wybranego seansu, przerywam dalsze wykonywanie metody.
 
@@ -101,7 +164,107 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
             seat_button.setFixedSize(40, 40) # Ustawiam stały rozmiar przycisku miejsca na 40 pikseli szerokości i 40 pikseli wysokości.
             seat_button.setProperty("seat_obj", seat) # Zapisuję referencję do oryginalnego obiektu Seat jako właściwość przycisku o nazwie "seat_obj". Pozwala to na łatwy dostęp do obiektu Seat z przycisku.
             
-            # Ustawiam styl przycisku w zależności od stanu miejsca.
+            # Ustawiam styl przycisku w zależności            from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout, QMessageBox, QDialog, QLineEdit, QComboBox, QInputDialog, QDialogButtonBox, QFrame
+            
+            class ReservationView(QWidget):
+                # ...existing code...
+            
+                def __init__(self):
+                    super().__init__()
+                    # Zmień główny layout na poziomy
+                    self.main_layout = QHBoxLayout(self)
+                    self.setLayout(self.main_layout)
+            
+                    # Lewa kolumna: dotychczasowy pionowy layout
+                    self.left_layout = QVBoxLayout()
+                    self.main_layout.addLayout(self.left_layout, stretch=1)
+            
+                    self.database = Database()
+                    self.reservation_facade = ReservationFacade()
+                    self.current_screening = None
+                    self.selected_seats = []
+                    self.available_ticket_factories = {}
+            
+                    self.screening_info_label = QLabel("Proszę wybrać seans z zakładki 'Seanse'.")
+                    self.left_layout.addWidget(self.screening_info_label)
+            
+                    self.seat_layout = QGridLayout()
+                    self.left_layout.addLayout(self.seat_layout)
+            
+                    self.price_label = QLabel("Łączna cena: 0.00 zł")
+                    self.left_layout.addWidget(self.price_label)
+            
+                    self.ticket_type_combo = QComboBox()
+                    self.ticket_type_combo.currentIndexChanged.connect(self.update_price)
+                    self.left_layout.addWidget(self.ticket_type_combo)
+            
+                    self.reserve_button = QPushButton("Zarezerwuj")
+                    self.reserve_button.setEnabled(False)
+                    self.reserve_button.clicked.connect(self.make_reservation)
+                    self.left_layout.addWidget(self.reserve_button)
+            
+                    self.left_layout.addStretch()
+            
+                    # Prawa kolumna: miejsce na legendę
+                    self.legend_layout = QVBoxLayout()
+                    self.legend_layout.addStretch()  # Legenda będzie przyklejona do góry
+                    self.main_layout.addLayout(self.legend_layout)
+            
+                    self.legend_widget = None
+            
+                def display_seat_layout(self):
+                    self.clear_seat_layout()
+            
+                    # --- LEGENDA KOLORÓW MIEJSC ---
+                    # Usuń starą legendę jeśli istnieje
+                    if self.legend_widget is not None:
+                        self.legend_layout.removeWidget(self.legend_widget)
+                        self.legend_widget.deleteLater()
+                        self.legend_widget = None
+            
+                    legend_widget = QWidget()
+                    legend_vbox = QVBoxLayout(legend_widget)
+                    legend_vbox.setContentsMargins(20, 40, 20, 0)
+                    legend_vbox.setSpacing(20)
+            
+                    # Lightgreen - wolne
+                    free_box = QFrame()
+                    free_box.setFixedSize(20, 20)
+                    free_box.setStyleSheet("background-color: lightgreen; border: 1px solid #888;")
+                    free_label = QLabel("Wolne")
+                    free_label.setStyleSheet("color: white;")
+                    row1 = QHBoxLayout()
+                    row1.addWidget(free_box)
+                    row1.addWidget(free_label)
+                    legend_vbox.addLayout(row1)
+            
+                    # Orange - zarezerwowane
+                    reserved_box = QFrame()
+                    reserved_box.setFixedSize(20, 20)
+                    reserved_box.setStyleSheet("background-color: orange; border: 1px solid #888;")
+                    reserved_label = QLabel("Zarezerwowane")
+                    reserved_label.setStyleSheet("color: white;")
+                    row2 = QHBoxLayout()
+                    row2.addWidget(reserved_box)
+                    row2.addWidget(reserved_label)
+                    legend_vbox.addLayout(row2)
+            
+                    # Red - sprzedane
+                    sold_box = QFrame()
+                    sold_box.setFixedSize(20, 20)
+                    sold_box.setStyleSheet("background-color: red; border: 1px solid #888;")
+                    sold_label = QLabel("Sprzedane")
+                    sold_label.setStyleSheet("color: white;")
+                    row3 = QHBoxLayout()
+                    row3.addWidget(sold_box)
+                    row3.addWidget(sold_label)
+                    legend_vbox.addLayout(row3)
+            
+                    legend_widget.setLayout(legend_vbox)
+                    self.legend_layout.insertWidget(0, legend_widget)
+                    self.legend_widget = legend_widget
+            
+                    # ...reszta kodu display_seat_layout... od stanu miejsca.
             if seat.state.__class__.__name__ == "FreeSeatState": # Sprawdzam, czy aktualny stan miejsca jest instancją klasy FreeSeatState (wolne).
                 seat_button.setStyleSheet("background-color: lightgreen;") # Jeśli miejsce jest wolne, ustawiam kolor tła przycisku na jasnozielony za pomocą stylów CSS.
                 seat_button.clicked.connect(self.toggle_seat_selection) # Podpinam sygnał 'clicked' przycisku do metody self.toggle_seat_selection. Oznacza to, że kliknięcie wolnego miejsca wywoła tę metodę w celu wyboru/odznaczenia miejsca.
@@ -129,14 +292,14 @@ class ReservationView(QWidget): # Deklaruję klasę ReservationView, która dzie
             self.seat_layout.addWidget(row_label, row, self.current_screening.cinema_hall.seats_per_row)  # Dodaję etykietę w kolumnie tuż za ostatnim miejscem w rzędzie.
 
         # Add a fixed minimum width for the gap column for middle
-        middle = self.current_screening.cinema_hall.rows // 2 # Calculate middle column index
-        self.seat_layout.setColumnMinimumWidth(int(middle), 60) # Set minimum width for the gap column
+        middle = (self.current_screening.cinema_hall.seats_per_row // 2)-1 # Calculate middle column index
+        self.seat_layout.setColumnMinimumWidth(middle, 60) # Set minimum width for the gap column
 
         # Dodaję etykiety miejsc do siatki dla lepszej czytelności.
         max_seat_num = self.current_screening.cinema_hall.seats_per_row
         for seat_num_idx in range(max_seat_num):  # Iterate using 0-based index
             seat_num = seat_num_idx + 1 # Actual seat number (1-based)
-            col_label = QLabel(f"M {seat_num}")  # Create label e.g., "M 7"
+            col_label = QLabel(f"M{seat_num}")  # Create label e.g., "M 7"
             col_label.setAlignment(Qt.AlignCenter)  # Center align label text
 
             # Place label in its natural column index
