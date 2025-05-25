@@ -1,7 +1,7 @@
 from utils.database import Database  # Importuję klasę Database, która jest Singletonem przechowującym dane (fasada będzie z niej korzystać).
-from models.reservation import Reservation  # Importuję klasę Reservation, ponieważ fasada będzie tworzyć obiekty tego typu.
-from models.seat import Seat  # Importuję klasę Seat, ponieważ fasada będzie operować na miejscach.
-from factories.ticket_factory import TicketFactory, RegularTicketFactory, DiscountedTicketFactory, VIPTicketFactory # Importuję konkretne fabryki biletów.
+from models.reservation import Reservation  # Import klasy Reservation do tworzenia nowych rezerwacji.
+from models.ticket import Ticket  # Import klasy Ticket do obsługi biletów.
+from strategies.pricing_strategy import PricingContext, RegularPricingStrategy, WeekendPricingStrategy, MorningPricingStrategy  # Import strategii cenowych i kontekstu strategii.
 
 class ReservationFacade:
     """
@@ -32,45 +32,6 @@ class ReservationFacade:
         # Wywołuję metodę get_available_seats() na obiekcie screening i zwracam jej wynik.
         return screening.get_available_seats()
     
-    def calculate_price(self, screening, seats, ticket_factory: TicketFactory):
-        """
-        Oblicza łączną cenę rezerwacji na podstawie wybranych miejsc i typu biletu (fabryki).
-        Metoda fasady, która oblicza cenę rezerwacji, używając fabryki biletów do stworzenia tymczasowych obiektów biletów.
-        Przyjmuje obiekt seansu, listę wybranych miejsc oraz obiekt fabryki biletów (np. RegularTicketFactory).
-        """
-        total_price = 0  # Inicjalizuję zmienną do przechowywania łącznej ceny na 0.
-        tickets = []  # Inicjalizuję pustą listę do przechowywania obiektów biletów.
-        
-        for seat in seats:  # Iteruję przez każde miejsce na liście wybranych miejsc.
-            # Używam podanej fabryki biletów do stworzenia obiektu biletu dla danego seansu i miejsca.
-            ticket = ticket_factory.create_ticket(screening, seat)
-            tickets.append(ticket)  # Dodaję utworzony bilet do listy biletów.
-            total_price += ticket.price  # Dodaję cenę utworzonego biletu do łącznej ceny.
-        
-        # Zwracam łączną cenę rezerwacji oraz listę utworzonych obiektów biletów.
-        return total_price, tickets
-    
-    def make_reservation(self, customer_name, screening, seats, tickets):
-        """
-        Tworzy nową rezerwację dla klienta.
-        Metoda fasady, która tworzy obiekt rezerwacji, aktualizuje stan miejsc i dodaje rezerwację do bazy danych.
-        Przyjmuje imię i nazwisko klienta, obiekt seansu, listę zarezerwowanych miejsc oraz listę utworzonych biletów.
-        """
-        # Tworzę nowy obiekt Reservation z podanymi danymi.
-        reservation = Reservation(customer_name, screening, seats, tickets)
-        
-        # Aktualizuję stan każdego zarezerwowanego miejsca na 'reserved'.
-        # Sprawdzam, czy aktualny stan miejsca to FreeSeatState przed zmianą na ReservedState.
-        from states.seat_state import ReservedSeatState, FreeSeatState # Importuję tutaj, aby uniknąć zależności cyklicznych na poziomie modułów
-        for seat in seats:
-            if isinstance(seat.state, FreeSeatState): # Sprawdzam, czy aktualny stan to FreeSeatState.
-                 seat.state = ReservedSeatState() # Zmieniam stan miejsca na ReservedSeatState.
-        
-        # Dodaję utworzoną rezerwację do bazy danych (co automatycznie zapisze rezerwacje do pliku JSON).
-        self.database.add_reservation(reservation)
-        # Zwracam utworzony obiekt rezerwacji.
-        return reservation
-
     def get_all_reservations(self):
         """
         Zwraca listę wszystkich rezerwacji.
@@ -83,14 +44,45 @@ class ReservationFacade:
         Zwraca słownik dostępnych opcji biletów (nazwa typu biletu jako klucz, fabryka jako wartość)
         dla danego seansu, w zależności od sali kinowej.
         """
-        hall_name = screening.cinema_hall.name
-        options = {}
+        from factories.ticket_factory import RegularTicketFactory, DiscountedTicketFactory, VIPTicketFactory  # Importowanie fabryk biletów wewnątrz metody, aby uniknąć cyklicznych zależności.
+        return {
+            "Normalny": RegularTicketFactory(),
+            "Ulgowy": DiscountedTicketFactory(),
+            "VIP": VIPTicketFactory()
+        }
 
-        if hall_name == "Sala 1" or hall_name == "Sala 2":
-            options["Normalny"] = RegularTicketFactory()
-            options["Ulgowy"] = DiscountedTicketFactory()
-        elif hall_name == "Sala VIP":
-            options["VIP"] = VIPTicketFactory()
-        # Można dodać domyślną obsługę lub zgłaszanie błędu, jeśli nazwa sali nie pasuje
+    def calculate_price(self, screening, selected_seats, ticket_factory):
+        """
+        Oblicza łączną cenę rezerwacji na podstawie wybranych miejsc i typu biletu (fabryki).
+        Metoda fasady, która oblicza cenę rezerwacji, używając fabryki biletów do stworzenia tymczasowych obiektów biletów.
+        Przyjmuje obiekt seansu, listę wybranych miejsc oraz obiekt fabryki biletów (np. RegularTicketFactory).
+        """
+        tickets = []  # Tworzenie pustej listy na bilety.
+        total_price = 0.0  # Inicjalizowanie sumy cen.
+        for seat in selected_seats:  # Iterowanie przez każde wybrane miejsce.
+            ticket = ticket_factory.create_ticket(screening, seat)  # Tworzenie biletu dla danego miejsca.
+            tickets.append(ticket)  # Dodawanie biletu do listy.
+            total_price += ticket.price  # Dodawanie ceny biletu do sumy.
+        # Zwracam łączną cenę rezerwacji oraz listę utworzonych obiektów biletów.
+        return total_price, tickets
+    
+    def make_reservation(self, customer_name, screening, selected_seats, tickets):
+        """
+        Tworzy nową rezerwację dla klienta.
+        Metoda fasady, która tworzy obiekt rezerwacji, aktualizuje stan miejsc i dodaje rezerwację do bazy danych.
+        Przyjmuje imię i nazwisko klienta, obiekt seansu, listę zarezerwowanych miejsc oraz listę utworzonych biletów.
+        """
+        # Tworzę nowy obiekt Reservation z podanymi danymi.
+        reservation = Reservation(customer_name, screening, selected_seats, tickets)
         
-        return options
+        # Aktualizuję stan każdego zarezerwowanego miejsca na 'reserved'.
+        # Sprawdzam, czy aktualny stan miejsca to FreeSeatState przed zmianą na ReservedState.
+        from states.seat_state import ReservedSeatState, FreeSeatState # Importuję tutaj, aby uniknąć zależności cyklicznych na poziomie modułów
+        for seat in selected_seats:
+            if isinstance(seat.state, FreeSeatState): # Sprawdzam, czy aktualny stan to FreeSeatState.
+                 seat.state = ReservedSeatState() # Zmieniam stan miejsca na ReservedSeatState.
+        
+        # Dodaję utworzoną rezerwację do bazy danych (co automatycznie zapisze rezerwacje do pliku JSON).
+        self.database.add_reservation(reservation)
+        # Zwracam utworzony obiekt rezerwacji.
+        return reservation

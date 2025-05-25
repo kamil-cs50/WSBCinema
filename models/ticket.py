@@ -1,44 +1,20 @@
 class Ticket:
     """
-    Klasa bazowa reprezentująca bilet na seans w WSBCinema.
-    Służy jako komponent dla wzorca Dekorator.
-    Klasa Ticket przechowuje podstawowe informacje o bilecie, takie jak seans, miejsce i cena.
+    Klasa reprezentująca bilet na seans filmowy.
+    Przechowywanie informacji o typie biletu, cenie oraz przypisanym miejscu.
     """
-    
-    def __init__(self, screening, seat, price):
+
+    def __init__(self, ticket_type: str, price: float, seat):
         """
         Inicjalizacja obiektu biletu.
-        Konstruktor przyjmuje obiekt seansu, obiekt miejsca oraz cenę biletu.
+        Przypisywanie typu biletu, ceny oraz obiektu miejsca do odpowiednich atrybutów.
         """
-        self.screening = screening  # Przypisuję obiekt seansu, na który jest bilet.
-        self.seat = seat  # Przypisuję obiekt miejsca, które rezerwuje bilet.
-        self.price = price  # Przypisuję cenę biletu.
-    
+        self.ticket_type = ticket_type  # Przypisywanie typu biletu do atrybutu ticket_type.
+        self.price = price  # Przypisywanie ceny biletu do atrybutu price.
+        self.seat = seat  # Przypisywanie obiektu miejsca do atrybutu seat.
+
     def __str__(self):
         """
-        Metoda zwracająca tekstową reprezentację obiektu biletu.
-        Ta metoda formatuje informacje o bilecie w czytelny sposób.
+        Zwracanie tekstowej reprezentacji biletu w formacie "Typ: X, Miejsce: Y, Cena: Z zł".
         """
-        # Zwracam sformatowany string zawierający tytuł filmu, czas seansu, numer miejsca i cenę.
-        return f"Bilet na {self.screening.movie.title} o {self.screening.date_time.strftime('%H:%M')}, Miejsce: {self.seat}, Cena: {self.price:.2f} zł"
-
-class RegularTicket(Ticket):
-    """
-    Klasa reprezentująca bilet normalny.
-    RegularTicket dziedziczy po klasie bazowej Ticket i nie dodaje żadnej nowej funkcjonalności ani danych.
-    """
-    pass  # 'pass' oznacza, że klasa nie ma dodatkowych metod ani atrybutów poza tymi dziedziczonymi.
-
-class DiscountedTicket(Ticket):
-    """
-    Klasa reprezentująca bilet ulgowy.
-    DiscountedTicket również dziedziczy po klasie Ticket. Cena ulgowa jest ustalana w fabryce biletów.
-    """
-    pass  # Klasa pusta, funkcjonalność związana ze zniżką jest w fabryce.
-
-class VIPTicket(Ticket):
-    """
-    Klasa reprezentująca bilet VIP.
-    VIPTicket dziedziczy po klasie Ticket. Dodatkowa opłata za bilet VIP jest ustalana w fabryce biletów lub przez dekorator.
-    """
-    pass  # Klasa pusta, funkcjonalność VIP może być dodana przez dekorator.
+        return f"{self.ticket_type}, {self.seat}, {self.price:.2f} zł"

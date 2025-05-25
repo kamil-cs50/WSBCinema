@@ -1,39 +1,36 @@
-import uuid  # Importuję moduł uuid do generowania unikalnych identyfikatorów dla każdej rezerwacji.
-from datetime import datetime  # Importuję klasę datetime do zapisywania czasu utworzenia rezerwacji.
-from models.screening import Screening # Importuję klasę Screening, aby określić typ seansu.
-from models.seat import Seat # Importuję klasę Seat, aby określić typ listy miejsc.
-from models.ticket import Ticket # Importuję klasę Ticket, aby określić typ listy biletów.
+import uuid  # Import modułu uuid do generowania unikalnych identyfikatorów dla każdej rezerwacji.
+from datetime import datetime  # Import klasy datetime do zapisywania czasu utworzenia rezerwacji.
+from models.screening import Screening # Import klasy Screening, aby określić typ seansu.
+from models.seat import Seat # Import klasy Seat, aby określić typ listy miejsc.
+from models.ticket import Ticket # Import klasy Ticket, aby określić typ listy biletów.
 
 class Reservation:
     """
-    Klasa reprezentująca rezerwację biletów dokonaną przez klienta w WSBCinema.
-    Obiekt Reservation przechowuje wszystkie szczegóły dotyczące konkretnej rezerwacji, w tym klienta, seans, zarezerwowane miejsca i bilety.
+    Klasa reprezentująca rezerwację w systemie WSBCinema.
+    Przechowywanie informacji o kliencie, seansie, zarezerwowanych miejscach, biletach oraz łącznej cenie.
     """
     
     def __init__(self, customer_name: str, screening: Screening, seats: list[Seat], tickets: list[Ticket]):
         """
         Inicjalizacja obiektu rezerwacji.
         Konstruktor przyjmuje imię i nazwisko klienta, obiekt seansu, listę zarezerwowanych obiektów miejsc oraz listę obiektów biletów.
-        Dodano adnotacje typów dla lepszej czytelności i statycznej analizy.
+        Dodawanie adnotacji typów dla lepszej czytelności i statycznej analizy.
         """
-        self.id: str = str(uuid.uuid4())  # Generuję unikalny identyfikator rezerwacji przy użyciu uuid.uuid4() i konwertuję go na string.
-        self.customer_name: str = customer_name  # Zapisuję imię i nazwisko klienta.
-        self.screening: Screening = screening  # Zapisuję odniesienie do obiektu seansu, na który dokonano rezerwacji.
-        self.seats: list[Seat] = seats  # Zapisuję listę obiektów Seat, które zostały zarezerwowane w ramach tej rezerwacji.
-        self.tickets: list[Ticket] = tickets  # Zapisuję listę obiektów Ticket wygenerowanych dla tej rezerwacji.
-        self.timestamp: datetime = datetime.now()  # Zapisuję aktualny czas utworzenia rezerwacji.
-        # Obliczam łączną cenę rezerwacji sumując ceny wszystkich biletów na liście.
-        self.total_price: float = sum(ticket.price for ticket in tickets)
+        self.id: str = str(uuid.uuid4())  # Generowanie unikalnego identyfikatora rezerwacji przy użyciu uuid.uuid4() i konwertowanie go na string.
+        self.customer_name: str = customer_name  # Przypisywanie imienia i nazwiska klienta.
+        self.screening: Screening = screening  # Przypisywanie odniesienia do obiektu seansu, na który dokonano rezerwacji.
+        self.seats: list[Seat] = seats  # Przypisywanie listy obiektów Seat, które zostały zarezerwowane w ramach tej rezerwacji.
+        self.tickets: list[Ticket] = tickets  # Przypisywanie listy obiektów Ticket wygenerowanych dla tej rezerwacji.
+        self.timestamp: datetime = datetime.now()  # Przypisywanie aktualnego czasu utworzenia rezerwacji.
+        self.total_price: float = sum(ticket.price for ticket in tickets)  # Obliczanie łącznej ceny rezerwacji sumując ceny wszystkich biletów na liście.
     
     def __str__(self) -> str:
         """
         Metoda zwracająca tekstową reprezentację obiektu rezerwacji.
         Ta metoda formatuje informacje o rezerwacji w czytelny sposób.
         """
-        # Tworzę sformatowany string zawierający numery rzędów i miejsc zarezerwowanych miejsc, połączone przecinkami.
-        seats_str = ", ".join([f"R{seat.row}M{seat.number}" for seat in self.seats]) # Poprawiono formatowanie miejsc
-        # Zwracam sformatowany tekst z danymi klienta, tytułem filmu, datą/czasem seansu, zarezerwowanymi miejscami i łączną ceną.
-        return f"{self.customer_name}: {self.screening.movie.title} ({self.screening.date_time.strftime('%d.%m.%Y %H:%M')}), Miejsca: {seats_str}, Cena: {self.total_price:.2f} zł"
+        seats_str = ", ".join([f"R{seat.row}M{seat.number}" for seat in self.seats]) # Formatowanie miejsc
+        return f"{self.customer_name} | {self.screening} | Miejsca: {seats_str} | Cena: {self.total_price:.2f} zł"
     
     def to_dict(self) -> dict:
         """

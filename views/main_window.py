@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         
         # Ustawiam podstawowe właściwości okna.
         self.setWindowTitle("WSBCinema - System Rezerwacji Biletów")  # Ustawiam tytuł paska okna.
-        self.setGeometry(100, 100, 1200, 800)  # Ustawiam pozycję (x, y) i rozmiar (szerokość, wysokość) okna.
+        self.setGeometry(100, 100, 1200, 800)
         
         # Tworzę główny widget centralny, który będzie zawierał wszystkie pozostałe elementy.
         self.central_widget = QWidget()  # Tworzę instancję QWidget.
@@ -35,8 +35,8 @@ class MainWindow(QMainWindow):
         
         # Tworzę główny układ pionowy dla centralnego widgetu.
         self.layout = QVBoxLayout(self.central_widget)  # Tworzę instancję QVBoxLayout i ustawiam central_widget jako jego rodzica.
-        self.layout.setContentsMargins(0, 0, 0, 0) # Usuwam domyślne marginesy wokół zawartości.
-        self.layout.setSpacing(0) # Ustawiam odstęp między elementami layoutu na 0.
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSpacing(0)
         
         # Tworzę nagłówek aplikacji.
         self.setup_header()  # Wywołuję metodę odpowiedzialną za tworzenie i konfigurację nagłówka.
@@ -56,22 +56,22 @@ class MainWindow(QMainWindow):
         header_container = QWidget()  # Tworzę widget kontenera.
         # Usunięto tymczasowe style i minimalną wysokość
         header_layout = QVBoxLayout(header_container)  # Tworzę pionowy układ dla kontenera nagłówka.
-        header_layout.setAlignment(Qt.AlignCenter) # Wyrównuję zawartość nagłówka do środka.
-        header_layout.setContentsMargins(20, 10, 20, 10) # Dodaję wewnętrzne marginesy.
+        header_layout.setAlignment(Qt.AlignCenter)
+        header_layout.setContentsMargins(20, 10, 20, 10)
 
         # Tworzę etykietę dla tytułu kina.
-        title = QLabel("WSBCinema")  # Tworzę etykietę z tekstem "WSBCinema".
-        title.setAlignment(Qt.AlignCenter)  # Wyrównuję tekst tytułu do środka.
-        title.setFont(QFont("Arial", 24, QFont.Bold))  # Ustawiam czcionkę: Arial, rozmiar 24, pogrubiona.
+        title = QLabel("WSBCinema")
+        title.setAlignment(Qt.AlignCenter)
+        title.setFont(QFont("Arial", 24, QFont.Bold))
         
         # Tworzę etykietę dla podtytułu systemu.
-        subtitle = QLabel("System Rezerwacji Biletów")  # Tworzę etykietę z tekstem podtytułu.
-        subtitle.setAlignment(Qt.AlignCenter)  # Wyrównuję tekst podtytułu do środka.
-        subtitle.setFont(QFont("Arial", 16))  # Ustawiam czcionkę: Arial, rozmiar 16.
+        subtitle = QLabel("System Rezerwacji Biletów")
+        subtitle.setAlignment(Qt.AlignCenter)
+        subtitle.setFont(QFont("Arial", 16))
         
         # Dodaję tytuł i podtytuł do układu nagłówka.
-        header_layout.addWidget(title)  # Dodaję etykietę tytułu do układu nagłówka.
-        header_layout.addWidget(subtitle)  # Dodaję etykietę podtytułu do układu nagłówka.
+        header_layout.addWidget(title)
+        header_layout.addWidget(subtitle)
         
         # Dodaję kontener nagłówka bezpośrednio do głównego układu
         self.layout.addWidget(header_container) 
@@ -91,9 +91,9 @@ class MainWindow(QMainWindow):
         self.reservation_tab = ReservationView()  # Tworzę widok rezerwacji.
         
         # Dodaję poszczególne widoki jako zakładki do QTabWidget.
-        self.tabs.addTab(self.movie_tab, "Filmy")  # Dodaję widok filmów jako zakładkę o nazwie "Filmy".
-        self.tabs.addTab(self.screening_tab, "Seanse")  # Dodaję widok seansów jako zakładkę o nazwie "Seanse".
-        self.tabs.addTab(self.reservation_tab, "Rezerwacje")  # Dodaję widok rezerwacji jako zakładkę o nazwie "Rezerwacje".
+        self.tabs.addTab(self.movie_tab, "Filmy")
+        self.tabs.addTab(self.screening_tab, "Seanse")
+        self.tabs.addTab(self.reservation_tab, "Rezerwacje")
         
         # Dodaję widget zakładek bezpośrednio do głównego układu
         self.layout.addWidget(self.tabs)
@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
         """
         print(f"MainWindow odebrało wybrany seans: {screening}") # Log: Potwierdzenie odebrania sygnału i obiektu seansu.
         self.reservation_tab.set_screening(screening) # Przekazuję wybrany obiekt seansu do metody set_screening w widoku rezerwacji.
-        self.tabs.setCurrentWidget(self.reservation_tab) # Ustawiam aktywną zakładkę na zakładkę rezerwacji.
+        self.tabs.setCurrentWidget(self.reservation_tab)
 
     def setup_styles(self):
         """
@@ -163,7 +163,7 @@ class MainWindow(QMainWindow):
                 /* Styl dla wszystkich etykiet (QLabel). */
                 color: white; /* Kolor tekstu na biały. */
             }
-        """)  # Stosuję zdefiniowany arkusz stylów do głównego okna i jego elementów.
+        """)  # Zdefiniowany arkusz stylów do głównego okna i jego elementów.
         
         self.tabs.setStyleSheet("""
             QTabBar::tab {

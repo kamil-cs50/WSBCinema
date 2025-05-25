@@ -3,19 +3,19 @@ from observers.seat_observer import SeatSubject  # Importuję klasę SeatSubject
 
 class Seat(SeatSubject):
     """
-    Klasa reprezentująca miejsce w sali kinowej.
-    Implementuje wzorzec Observer (jako podmiot obserwowany) oraz wzorzec State (do zarządzania stanem miejsca).
-    Klasa Seat dziedziczy po SeatSubject, co oznacza, że inne obiekty mogą ją obserwować i reagować na zmiany jej stanu.
+    Klasa reprezentująca pojedyncze miejsce w sali kinowej.
+    Przechowywanie informacji o numerze rzędu, numerze miejsca oraz stanie miejsca.
     """
     
-    def __init__(self, row, number):
+    def __init__(self, row: int, number: int):
         """
         Inicjalizacja obiektu miejsca.
-        Konstruktor przyjmuje numer rzędu i numer miejsca w rzędzie.
+        Przypisywanie numeru rzędu i numeru miejsca do odpowiednich atrybutów.
+        Ustawianie początkowego stanu miejsca na wolne.
         """
         super().__init__()  # Wywołuję konstruktor klasy nadrzędnej (SeatSubject) do inicjalizacji mechanizmu obserwatorów.
-        self.row = row  # Zapisuję numer rzędu miejsca.
-        self.number = number  # Zapisuję numer miejsca w rzędzie.
+        self.row = row  # Przypisywanie numeru rzędu do atrybutu row.
+        self.number = number  # Przypisywanie numeru miejsca do atrybutu number.
         self._state = FreeSeatState()  # Ustawiam początkowy stan miejsca na FreeSeatState, czyli wolne (inicjalizacja wzorca State).
     
     @property
@@ -68,4 +68,4 @@ class Seat(SeatSubject):
         Metoda zwracająca tekstową reprezentację obiektu miejsca.
         Zwraca sformatowany string, np. "R1M5" dla miejsca w rzędzie 1, miejsce 5.
         """
-        return f"R{self.row}M{self.number}"  # Zwracam sformatowany tekst z numerem rzędu i miejsca.
+        return f"Rząd {self.row} Miejsce {self.number}"  # Zwracam sformatowany tekst z numerem rzędu i miejsca.
