@@ -18,3 +18,14 @@ class Ticket:
         Zwracanie tekstowej reprezentacji biletu w formacie "Typ: X, Miejsce: Y, Cena: Z zł".
         """
         return f"{self.ticket_type}, {self.seat}, {self.price:.2f} zł"
+class RegularTicket(Ticket):
+    def __init__(self, screening, seat, price):
+        super().__init__("Normalny", price, seat)
+
+class DiscountedTicket(Ticket):
+    def __init__(self, screening, seat, price):
+        super().__init__("Ulgowy", price, seat)
+
+class VIPTicket(Ticket):
+    def __init__(self, screening, seat, price):
+        super().__init__("VIP", price, seat)
