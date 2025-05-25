@@ -1,1 +1,293 @@
-[]
+[
+    {
+        "id": "4c76899f-c46d-40fd-b719-2248ef83ac5e",
+        "customer_name": "Jan Nowak",
+        "movie_title": "Everything Everywhere All at Once",
+        "hall_name": "Sala 2",
+        "date_time": "2025-05-26T15:30:00",
+        "seats": [
+            {
+                "row": 9,
+                "number": 9
+            },
+            {
+                "row": 9,
+                "number": 8
+            },
+            {
+                "row": 9,
+                "number": 7
+            },
+            {
+                "row": 9,
+                "number": 6
+            },
+            {
+                "row": 9,
+                "number": 5
+            }
+        ],
+        "total_price": 125,
+        "timestamp": "2025-05-25T15:37:44.146602"
+    },
+    {
+        "id": "7a6364bb-d3ec-4b79-8d15-c4bcdbdf3c0e",
+        "customer_name": "Kamil \u015alimak",
+        "movie_title": "Oppenheimer",
+        "hall_name": "Sala 1",
+        "date_time": "2025-05-31T10:00:00",
+        "seats": [
+            {
+                "row": 3,
+                "number": 7
+            },
+            {
+                "row": 3,
+                "number": 6
+            },
+            {
+                "row": 4,
+                "number": 6
+            },
+            {
+                "row": 5,
+                "number": 6
+            },
+            {
+                "row": 4,
+                "number": 7
+            },
+            {
+                "row": 5,
+                "number": 7
+            },
+            {
+                "row": 5,
+                "number": 8
+            },
+            {
+                "row": 4,
+                "number": 8
+            },
+            {
+                "row": 4,
+                "number": 9
+            },
+            {
+                "row": 5,
+                "number": 9
+            }
+        ],
+        "total_price": 200,
+        "timestamp": "2025-05-25T15:41:49.373595"
+    },
+    {
+        "id": "d55aaeab-c3f0-4fe2-8b67-c52fbb201ce9",
+        "customer_name": "Jan Duda",
+        "movie_title": "Oppenheimer",
+        "hall_name": "Sala 1",
+        "date_time": "2025-05-29T10:00:00",
+        "seats": [
+            {
+                "row": 5,
+                "number": 6
+            },
+            {
+                "row": 6,
+                "number": 6
+            },
+            {
+                "row": 5,
+                "number": 5
+            },
+            {
+                "row": 6,
+                "number": 5
+            },
+            {
+                "row": 5,
+                "number": 4
+            },
+            {
+                "row": 6,
+                "number": 4
+            },
+            {
+                "row": 3,
+                "number": 2
+            },
+            {
+                "row": 3,
+                "number": 3
+            },
+            {
+                "row": 2,
+                "number": 3
+            },
+            {
+                "row": 2,
+                "number": 2
+            },
+            {
+                "row": 3,
+                "number": 9
+            },
+            {
+                "row": 3,
+                "number": 10
+            }
+        ],
+        "total_price": 240,
+        "timestamp": "2025-05-25T15:42:11.953512"
+    },
+    {
+        "id": "d7bc9494-854b-402a-a5a2-eeb1754dab49",
+        "customer_name": "Micha\u0142 Anio\u0142",
+        "movie_title": "Oppenheimer",
+        "hall_name": "Sala 1",
+        "date_time": "2025-05-29T10:00:00",
+        "seats": [
+            {
+                "row": 7,
+                "number": 9
+            },
+            {
+                "row": 7,
+                "number": 8
+            },
+            {
+                "row": 6,
+                "number": 8
+            },
+            {
+                "row": 6,
+                "number": 9
+            },
+            {
+                "row": 6,
+                "number": 10
+            },
+            {
+                "row": 7,
+                "number": 10
+            }
+        ],
+        "total_price": 84.0,
+        "timestamp": "2025-05-25T15:42:22.946416"
+    },
+    {
+        "id": "78d4b0d7-2450-42dc-9d0f-56b1aed48507",
+        "customer_name": "Krzysztof Kolumb",
+        "movie_title": "Everything Everywhere All at Once",
+        "hall_name": "Sala 2",
+        "date_time": "2025-05-29T15:30:00",
+        "seats": [
+            {
+                "row": 8,
+                "number": 10
+            },
+            {
+                "row": 7,
+                "number": 9
+            },
+            {
+                "row": 7,
+                "number": 10
+            },
+            {
+                "row": 8,
+                "number": 9
+            },
+            {
+                "row": 7,
+                "number": 8
+            },
+            {
+                "row": 7,
+                "number": 7
+            },
+            {
+                "row": 7,
+                "number": 6
+            },
+            {
+                "row": 7,
+                "number": 5
+            },
+            {
+                "row": 6,
+                "number": 5
+            },
+            {
+                "row": 6,
+                "number": 4
+            },
+            {
+                "row": 7,
+                "number": 4
+            },
+            {
+                "row": 6,
+                "number": 3
+            },
+            {
+                "row": 7,
+                "number": 3
+            },
+            {
+                "row": 4,
+                "number": 5
+            },
+            {
+                "row": 4,
+                "number": 4
+            },
+            {
+                "row": 4,
+                "number": 9
+            },
+            {
+                "row": 4,
+                "number": 10
+            },
+            {
+                "row": 3,
+                "number": 7
+            },
+            {
+                "row": 3,
+                "number": 8
+            },
+            {
+                "row": 10,
+                "number": 7
+            },
+            {
+                "row": 10,
+                "number": 6
+            },
+            {
+                "row": 10,
+                "number": 5
+            },
+            {
+                "row": 10,
+                "number": 8
+            },
+            {
+                "row": 9,
+                "number": 12
+            },
+            {
+                "row": 2,
+                "number": 11
+            },
+            {
+                "row": 4,
+                "number": 2
+            }
+        ],
+        "total_price": 455.0,
+        "timestamp": "2025-05-25T15:56:05.336590"
+    }
+]

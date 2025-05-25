@@ -1,31 +1,44 @@
 class Ticket:
     """
-    Klasa reprezentująca bilet na seans filmowy.
-    Przechowywanie informacji o typie biletu, cenie oraz przypisanym miejscu.
+    Klasa bazowa reprezentująca bilet na seans w WSBCinema.
+    Służy jako komponent dla wzorca Dekorator.
+    Klasa Ticket przechowuje podstawowe informacje o bilecie, takie jak seans, miejsce i cena.
     """
-
-    def __init__(self, ticket_type: str, price: float, seat):
+    
+    def __init__(self, screening, seat, price):
         """
         Inicjalizacja obiektu biletu.
-        Przypisywanie typu biletu, ceny oraz obiektu miejsca do odpowiednich atrybutów.
+        Konstruktor przyjmuje obiekt seansu, obiekt miejsca oraz cenę biletu.
         """
-        self.ticket_type = ticket_type  # Przypisywanie typu biletu do atrybutu ticket_type.
-        self.price = price  # Przypisywanie ceny biletu do atrybutu price.
-        self.seat = seat  # Przypisywanie obiektu miejsca do atrybutu seat.
-
+        self.screening = screening  # Przypisanie obiektu seansu, na który jest bilet.
+        self.seat = seat  # Przypisanie obiektu miejsca, które rezerwuje bilet.
+        self.price = price  # Przypisanie ceny biletu.
+    
     def __str__(self):
         """
-        Zwracanie tekstowej reprezentacji biletu w formacie "Typ: X, Miejsce: Y, Cena: Z zł".
+        Metoda zwracająca tekstową reprezentację obiektu biletu.
+        Ta metoda formatuje informacje o bilecie w czytelny sposób.
         """
-        return f"{self.ticket_type}, {self.seat}, {self.price:.2f} zł"
+        # Zwracanie sformatowanego stringa zawierającego tytuł filmu, czas seansu, numer miejsca i cenę.
+        return f"Bilet na {self.screening.movie.title} o {self.screening.date_time.strftime('%H:%M')}, Miejsce: {self.seat}, Cena: {self.price:.2f} zł"
+
 class RegularTicket(Ticket):
-    def __init__(self, screening, seat, price):
-        super().__init__("Normalny", price, seat)
+    """
+    Klasa reprezentująca bilet normalny.
+    RegularTicket dziedziczy po klasie bazowej Ticket i nie dodaje żadnej nowej funkcjonalności ani danych.
+    """
+    pass  # 'pass' oznacza, że klasa nie ma dodatkowych metod ani atrybutów poza tymi dziedziczonymi.
 
 class DiscountedTicket(Ticket):
-    def __init__(self, screening, seat, price):
-        super().__init__("Ulgowy", price, seat)
+    """
+    Klasa reprezentująca bilet ulgowy.
+    DiscountedTicket również dziedziczy po klasie Ticket. Cena ulgowa jest ustalana w fabryce biletów.
+    """
+    pass  # Klasa pusta, funkcjonalność związana ze zniżką jest w fabryce.
 
 class VIPTicket(Ticket):
-    def __init__(self, screening, seat, price):
-        super().__init__("VIP", price, seat)
+    """
+    Klasa reprezentująca bilet VIP.
+    VIPTicket dziedziczy po klasie Ticket. Dodatkowa opłata za bilet VIP jest ustalana w fabryce biletów lub przez dekorator.
+    """
+    pass  # Klasa pusta, funkcjonalność VIP może być dodana przez dekorator.
