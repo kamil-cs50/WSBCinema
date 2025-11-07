@@ -1,0 +1,58 @@
+@startuml
+title Diagram Aktywności - Przeglądanie Seansów
+
+start
+
+:Użytkownik otwiera aplikację;
+
+:Przechodzi do zakładki "Seanse";
+
+:System pobiera listę sal z bazy danych;
+
+:System pobiera listę filmów z bazy danych;
+
+:Użytkownik wybiera datę z kalendarza;
+
+:System filtruje seanse według wybranej daty;
+
+if (Seanse dostępne?) then (tak)
+  
+  :System wyświetla listę seansów;
+  
+  partition "Dla każdego seansu" {
+    :Wyświetla tytuł filmu;
+    :Wyświetla godzinę seansu;
+    :Wyświetla numer sali;
+    :Wyświetla cenę bazową;
+    :Wyświetla liczbę wolnych miejsc;
+  }
+  
+  :Użytkownik przegląda seanse;
+  
+  if (Wybiera seans?) then (tak)
+    :Przechodzi do widoku rezerwacji;
+    stop
+  else (nie)
+    if (Zmienia datę?) then (tak)
+      :Wybiera nową datę;
+      stop
+    else (nie)
+      :Zamyka aplikację;
+      stop
+    endif
+  endif
+  
+else (nie)
+  :Wyświetla komunikat "Brak seansów w wybranym dniu";
+  
+  if (Wybiera inną datę?) then (tak)
+    :Wybiera nową datę z kalendarza;
+    stop
+  else (nie)
+    :Zamyka aplikację;
+    stop
+  endif
+  
+endif
+
+@enduml

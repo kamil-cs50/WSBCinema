@@ -1,0 +1,56 @@
+@startuml
+title Diagram Aktywności - Rezerwacja Biletów
+
+start
+
+:Użytkownik otwiera aplikację;
+
+:Wybiera zakładkę "Seanse";
+
+:Wybiera datę z kalendarza;
+
+:System wyświetla listę seansów;
+
+:Użytkownik wybiera seans;
+
+:System wyświetla plan sali;
+
+:Użytkownik wybiera miejsca;
+
+if (Miejsca dostępne?) then (tak)
+  :Użytkownik wybiera typ biletu;
+  
+  if (Dodać opcję 3D?) then (tak)
+    :System dodaje dekorator 3D;
+  else (nie)
+  endif
+  
+  if (Dodać zestaw przekąsek?) then (tak)
+    :System dodaje dekorator przekąsek;
+  else (nie)
+  endif
+  
+  :System oblicza cenę;
+  
+  :Wyświetla podsumowanie;
+  
+  :Użytkownik potwierdza rezerwację;
+  
+  :System zmienia stan miejsc na "Zarezerwowane";
+  
+  :System zapisuje rezerwację do pliku JSON;
+  
+  :Wyświetla potwierdzenie;
+  
+  stop
+  
+else (nie)
+  :Wyświetla komunikat o błędzie;
+  
+  :Użytkownik wybiera inne miejsca;
+  
+  stop
+  
+endif
+
+@enduml

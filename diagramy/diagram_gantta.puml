@@ -1,0 +1,81 @@
+@startgantt
+title Diagram Gantta - Projekt WSBCinema
+projectscale daily
+saturday are closed
+sunday are closed
+
+-- Faza 1: Analiza i Projektowanie --
+[Analiza wymagań] lasts 5 days
+[Analiza wymagań] is colored in LightBlue
+[Zbieranie wymagań funkcjonalnych] lasts 2 days
+[Zbieranie wymagań funkcjonalnych] starts at [Analiza wymagań]'s start
+[Analiza wzorców projektowych] lasts 3 days
+[Analiza wzorców projektowych] starts at [Zbieranie wymagań funkcjonalnych]'s end
+
+[Projektowanie architektury] lasts 7 days
+[Projektowanie architektury] is colored in LightGreen
+[Projektowanie architektury] starts at [Analiza wymagań]'s end
+[Diagram klas] lasts 3 days
+[Diagram klas] starts at [Projektowanie architektury]'s start
+[Diagram przypadków użycia] lasts 2 days
+[Diagram przypadków użycia] starts at [Diagram klas]'s end
+[Diagramy aktywności] lasts 2 days
+[Diagramy aktywności] starts at [Diagram przypadków użycia]'s end
+
+-- Faza 2: Implementacja --
+[Implementacja modeli] lasts 10 days
+[Implementacja modeli] is colored in LightCoral
+[Implementacja modeli] starts at [Projektowanie architektury]'s end
+[Movie, CinemaHall, Seat] lasts 3 days
+[Movie, CinemaHall, Seat] starts at [Implementacja modeli]'s start
+[Screening, Ticket] lasts 3 days
+[Screening, Ticket] starts at [Movie, CinemaHall, Seat]'s end
+[Reservation] lasts 4 days
+[Reservation] starts at [Screening, Ticket]'s end
+
+[Implementacja wzorców] lasts 12 days
+[Implementacja wzorców] is colored in Khaki
+[Implementacja wzorców] starts at [Implementacja modeli]'s end
+[Builder, Singleton] lasts 3 days
+[Builder, Singleton] starts at [Implementacja wzorców]'s start
+[Factory, Facade] lasts 3 days
+[Factory, Facade] starts at [Builder, Singleton]'s end
+[Decorator, Observer] lasts 3 days
+[Decorator, Observer] starts at [Factory, Facade]'s end
+[State, Strategy] lasts 3 days
+[State, Strategy] starts at [Decorator, Observer]'s end
+
+[Implementacja GUI] lasts 15 days
+[Implementacja GUI] is colored in LightSkyBlue
+[Implementacja GUI] starts at [Implementacja wzorców]'s end
+[MainWindow, struktura] lasts 3 days
+[MainWindow, struktura] starts at [Implementacja GUI]'s start
+[MovieView] lasts 3 days
+[MovieView] starts at [MainWindow, struktura]'s end
+[ScreeningView] lasts 4 days
+[ScreeningView] starts at [MovieView]'s end
+[ReservationView] lasts 5 days
+[ReservationView] starts at [ScreeningView]'s end
+
+-- Faza 3: Testowanie i Dokumentacja --
+[Testy] lasts 8 days
+[Testy] is colored in Plum
+[Testy] starts at [Implementacja GUI]'s end
+[Testy jednostkowe] lasts 3 days
+[Testy jednostkowe] starts at [Testy]'s start
+[Testy integracyjne] lasts 3 days
+[Testy integracyjne] starts at [Testy jednostkowe]'s end
+[Testy akceptacyjne] lasts 2 days
+[Testy akceptacyjne] starts at [Testy integracyjne]'s end
+
+[Dokumentacja] lasts 5 days
+[Dokumentacja] is colored in LightGoldenRodYellow
+[Dokumentacja] starts at [Testy]'s end
+[Dokumentacja techniczna] lasts 2 days
+[Dokumentacja techniczna] starts at [Dokumentacja]'s start
+[Dokumentacja użytkownika] lasts 2 days
+[Dokumentacja użytkownika] starts at [Dokumentacja techniczna]'s end
+[Przygotowanie prezentacji] lasts 1 days
+[Przygotowanie prezentacji] starts at [Dokumentacja użytkownika]'s end
+
+@endgantt

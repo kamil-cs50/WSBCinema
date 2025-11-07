@@ -1,0 +1,452 @@
+================================================================================
+        INSTRUKCJA ODCZYTYWANIA I INTERPRETOWANIA DIAGRAMÓW
+                    Projekt WSBCinema
+================================================================================
+
+SPIS TREŚCI:
+1. Diagram Gantta
+2. Diagram Klas
+3. Diagram Przypadków Użycia
+4. Diagram Aktywności - Rezerwacja Biletów
+5. Diagram Aktywności - Przeglądanie Seansów
+
+================================================================================
+1. DIAGRAM GANTTA (diagram_gantta.jpeg)
+================================================================================
+
+DEFINICJA:
+Diagram Gantta to narzędzie zarządzania projektem przedstawiające harmonogram 
+realizacji zadań w czasie. Pokazuje kolejność wykonywania zadań, ich czas 
+trwania oraz zależności między nimi.
+
+JAK ODCZYTYWAĆ:
+- Oś pozioma: reprezentuje czas (dni robocze)
+- Oś pionowa: lista zadań/etapów projektu
+- Prostokąty (paski): reprezentują czas trwania zadania
+- Kolory: różne fazy projektu (niebieski - analiza, zielony - projektowanie, 
+  czerwony - implementacja modeli, żółty - wzorce, błękitny - GUI, 
+  fioletowy - testy, złoty - dokumentacja)
+- Strzałki/połączenia: pokazują zależności między zadaniami
+
+STRUKTURA PROJEKTU WSBCinema:
+
+FAZA 1: Analiza i Projektowanie (12 dni)
+├── Analiza wymagań (5 dni)
+│   ├── Zbieranie wymagań funkcjonalnych (2 dni)
+│   └── Analiza wzorców projektowych (3 dni)
+└── Projektowanie architektury (7 dni)
+    ├── Diagram klas (3 dni)
+    ├── Diagram przypadków użycia (2 dni)
+    └── Diagramy aktywności (2 dni)
+
+FAZA 2: Implementacja (37 dni)
+├── Implementacja modeli (10 dni)
+│   ├── Movie, CinemaHall, Seat (3 dni)
+│   ├── Screening, Ticket (3 dni)
+│   └── Reservation (4 dni)
+├── Implementacja wzorców (12 dni)
+│   ├── Builder, Singleton (3 dni)
+│   ├── Factory, Facade (3 dni)
+│   ├── Decorator, Observer (3 dni)
+│   └── State, Strategy (3 dni)
+└── Implementacja GUI (15 dni)
+    ├── MainWindow, struktura (3 dni)
+    ├── MovieView (3 dni)
+    ├── ScreeningView (4 dni)
+    └── ReservationView (5 dni)
+
+FAZA 3: Testowanie i Dokumentacja (13 dni)
+├── Testy (8 dni)
+│   ├── Testy jednostkowe (3 dni)
+│   ├── Testy integracyjne (3 dni)
+│   └── Testy akceptacyjne (2 dni)
+└── Dokumentacja (5 dni)
+    ├── Dokumentacja techniczna (2 dni)
+    ├── Dokumentacja użytkownika (2 dni)
+    └── Przygotowanie prezentacji (1 dzień)
+
+ŁĄCZNY CZAS: 62 dni robocze (bez weekendów)
+
+INTERPRETACJA:
+- Zadania są wykonywane sekwencyjnie (jedno po drugim)
+- Każde zadanie rozpoczyna się po zakończeniu poprzedniego
+- Weekendy są wyłączone z harmonogramu
+- Podział na podzadania pokazuje szczegółowy plan realizacji
+
+================================================================================
+2. DIAGRAM KLAS (diagram_klas.jpeg)
+================================================================================
+
+DEFINICJA:
+Diagram klas to statyczny diagram strukturalny UML pokazujący klasy systemu, 
+ich atrybuty, metody oraz relacje między nimi. Jest podstawowym diagramem 
+w projektowaniu obiektowym.
+
+JAK ODCZYTYWAĆ:
+
+NOTACJA KLASY:
+┌─────────────────┐
+│   NazwaKlasy    │  ← Nazwa klasy
+├─────────────────┤
+│ - atrybut: typ  │  ← Atrybuty (- prywatny, + publiczny)
+├─────────────────┤
+│ + metoda(): typ │  ← Metody
+└─────────────────┘
+
+MODYFIKATORY DOSTĘPU:
+- (minus) = prywatny (private)
++ (plus) = publiczny (public)
+# (hash) = chroniony (protected)
+{static} = statyczny
+{abstract} = abstrakcyjny
+
+RELACJE:
+→ (strzałka ciągła) = asocjacja/zależność
+---> (strzałka przerywana) = zależność/użycie
+◆─── (czarny romb) = kompozycja (silna własność)
+◇─── (biały romb) = agregacja (słaba własność)
+△─── (trójkąt) = dziedziczenie/generalizacja
+"1", "0..*", "many" = krotność relacji
+
+STRUKTURA PROJEKTU WSBCinema:
+
+MODELE PODSTAWOWE (6 klas):
+1. Movie - reprezentuje film (tytuł, czas trwania, kategoria wiekowa)
+2. CinemaHall - reprezentuje salę kinową (nazwa, rzędy, miejsca)
+3. Seat - reprezentuje miejsce w sali (rząd, numer, stan)
+4. Screening - reprezentuje seans (film, sala, data, cena, miejsca)
+5. Ticket - reprezentuje bilet (seans, miejsce, cena)
+   ├── RegularTicket - bilet normalny
+   ├── DiscountedTicket - bilet ulgowy
+   └── VIPTicket - bilet VIP
+6. Reservation - reprezentuje rezerwację (klient, seans, miejsca, bilety)
+
+WZORCE PROJEKTOWE (8 wzorców, 24 klasy):
+
+A) BUILDER (Budowniczy):
+   - ScreeningBuilder - krokowe tworzenie seansów
+   - Metody: set_movie(), set_cinema_hall(), set_date_time(), build()
+
+B) SINGLETON (Singleton):
+   - Database - jedna instancja bazy danych w całej aplikacji
+   - Metody: __new__(), add_*(), get_*(), save/load_reservations()
+
+C) FACTORY METHOD (Fabryka):
+   - TicketFactory (abstrakcyjna)
+   - RegularTicketFactory - tworzy bilety normalne
+   - DiscountedTicketFactory - tworzy bilety ulgowe (30% zniżki)
+   - VIPTicketFactory - tworzy bilety VIP (50% dopłaty)
+
+D) FACADE (Fasada):
+   - ReservationFacade - upraszcza proces rezerwacji
+   - Metody: get_available_screenings(), calculate_price(), make_reservation()
+
+E) DECORATOR (Dekorator):
+   - TicketDecorator (abstrakcyjny) - rozszerza funkcjonalność biletów
+   - ThreeDTicketDecorator - dodaje opcję 3D (+5 zł)
+   - SnackComboTicketDecorator - dodaje przekąski (+15 zł)
+
+F) OBSERVER (Obserwator):
+   - SeatObserver (abstrakcyjny) - interfejs obserwatora
+   - SeatView - konkretny obserwator (aktualizuje widok)
+   - SeatSubject - podmiot obserwowany (powiadamia o zmianach)
+
+G) STATE (Stan):
+   - SeatState (abstrakcyjny) - interfejs stanu miejsca
+   - FreeSeatState - miejsce wolne (można zarezerwować)
+   - ReservedSeatState - miejsce zarezerwowane (można anulować)
+   - SoldSeatState - miejsce sprzedane (nie można zmienić)
+
+H) STRATEGY (Strategia):
+   - PricingStrategy (abstrakcyjna) - interfejs strategii cenowej
+   - RegularPricingStrategy - cena standardowa (100%)
+   - WeekendPricingStrategy - cena weekendowa (+20%)
+   - MorningPricingStrategy - cena poranna (-20%)
+   - PricingContext - kontekst używający strategii
+
+WIDOKI GUI (4 klasy):
+- MainWindow - główne okno aplikacji (zawiera 3 zakładki)
+- MovieView - widok zarządzania filmami
+- ScreeningView - widok przeglądania seansów
+- ReservationView - widok rezerwacji biletów
+
+KLUCZOWE RELACJE:
+- Screening *-- Seat (kompozycja: miejsca należą do seansu)
+- Reservation *-- Ticket (kompozycja: bilety należą do rezerwacji)
+- Seat o-- SeatState (agregacja: miejsce ma stan)
+- TicketDecorator --|> Ticket (dziedziczenie i opakowywanie)
+
+INTERPRETACJA:
+Diagram pokazuje pełną architekturę systemu z zastosowaniem 8 wzorców 
+projektowych, co zapewnia elastyczność, rozszerzalność i łatwość utrzymania.
+
+================================================================================
+3. DIAGRAM PRZYPADKÓW UŻYCIA (diagram_przypadkow_uzycia.jpeg)
+================================================================================
+
+DEFINICJA:
+Diagram przypadków użycia to diagram behawioralny UML pokazujący funkcjonalności 
+systemu z perspektywy użytkownika. Przedstawia aktorów, przypadki użycia 
+i relacje między nimi.
+
+JAK ODCZYTYWAĆ:
+
+ELEMENTY:
+- Aktor (stick figure): użytkownik lub system zewnętrzny
+- Przypadek użycia (elipsa): funkcjonalność systemu
+- Prostokąt: granica systemu
+- Linie: relacje między aktorami a przypadkami użycia
+
+RELACJE:
+→ (ciągła linia) = aktor inicjuje przypadek użycia
+..> <<include>> = przypadek A zawsze wymaga przypadku B
+..> <<extend>> = przypadek B opcjonalnie rozszerza przypadek A
+
+AKTORZY W SYSTEMIE:
+1. Użytkownik - główny aktor (osoba rezerwująca bilety)
+2. System - aktor systemowy (wykonuje automatyczne operacje)
+
+PRZYPADKI UŻYCIA (13):
+
+GRUPA 1: Przeglądanie informacji
+UC1: Przeglądaj filmy
+     - Użytkownik przegląda dostępne filmy w systemie
+
+GRUPA 2: Proces rezerwacji (główny przepływ)
+UC2: Wybierz datę seansu
+     - Użytkownik wybiera datę z kalendarza
+     
+UC3: Przeglądaj seanse
+     - <<include>> UC2 (wymaga wyboru daty)
+     - Wyświetla seanse dla wybranej daty
+     
+UC4: Wybierz seans
+     - <<include>> UC3 (wymaga przeglądania seansów)
+     - Użytkownik wybiera konkretny seans
+     
+UC5: Wyświetl plan sali
+     - <<include>> UC4 (wymaga wyboru seansu)
+     - System pokazuje mapę miejsc w sali
+     
+UC6: Wybierz miejsca
+     - <<include>> UC5 (wymaga planu sali)
+     - Użytkownik wybiera miejsca do rezerwacji
+     
+UC7: Wybierz typ biletu
+     - <<include>> UC6 (wymaga wybranych miejsc)
+     - Użytkownik wybiera typ biletu (normalny/ulgowy/VIP)
+
+GRUPA 3: Opcje dodatkowe (rozszerzenia)
+UC8: Dodaj opcje 3D
+     - <<extend>> UC7 (opcjonalne rozszerzenie)
+     - Użytkownik może dodać opcję 3D (+5 zł)
+     
+UC9: Dodaj zestaw przekąsek
+     - <<extend>> UC7 (opcjonalne rozszerzenie)
+     - Użytkownik może dodać przekąski (+15 zł)
+
+GRUPA 4: Finalizacja (automatyczne)
+UC10: Oblicz cenę
+      - <<include>> UC7 (wymaga typu biletu)
+      - System automatycznie oblicza łączną cenę
+      
+UC11: Potwierdź rezerwację
+      - <<include>> UC10 (wymaga obliczonej ceny)
+      - Użytkownik potwierdza rezerwację
+      
+UC12: Zapisz rezerwację
+      - <<include>> UC11 (wymaga potwierdzenia)
+      - System zapisuje rezerwację do bazy
+      
+UC13: Wyświetl potwierdzenie
+      - <<include>> UC12 (wymaga zapisu)
+      - System wyświetla potwierdzenie rezerwacji
+
+INTERPRETACJA:
+Diagram pokazuje kompletny proces rezerwacji od wyboru daty do potwierdzenia.
+Relacje <<include>> tworzą łańcuch zależności (każdy krok wymaga poprzedniego).
+Relacje <<extend>> pokazują opcjonalne funkcjonalności (3D, przekąski).
+
+================================================================================
+4. DIAGRAM AKTYWNOŚCI - REZERWACJA BILETÓW 
+   (diagram_aktywnosci_rezerwacja.jpeg)
+================================================================================
+
+DEFINICJA:
+Diagram aktywności to diagram behawioralny UML pokazujący przepływ sterowania 
+lub przepływ danych w systemie. Przedstawia sekwencję działań i decyzji.
+
+JAK ODCZYTYWAĆ:
+
+ELEMENTY:
+● (czarne kółko) = punkt początkowy (start)
+◉ (kółko z obwódką) = punkt końcowy (stop)
+┌─────────┐
+│ Akcja   │ = czynność/operacja
+└─────────┘
+◇ (romb) = punkt decyzyjny (if/else)
+→ (strzałka) = przepływ sterowania
+[warunek] = etykieta warunku
+
+PRZEPŁYW REZERWACJI BILETÓW:
+
+START
+  ↓
+1. Użytkownik otwiera aplikację
+  ↓
+2. Wybiera zakładkę "Seanse"
+  ↓
+3. Wybiera datę z kalendarza
+  ↓
+4. System wyświetla listę seansów
+  ↓
+5. Użytkownik wybiera seans
+  ↓
+6. System wyświetla plan sali
+  ↓
+7. Użytkownik wybiera miejsca
+  ↓
+8. DECYZJA: Miejsca dostępne?
+   ├─ NIE → Wyświetla komunikat o błędzie → Użytkownik wybiera inne miejsca → STOP
+   └─ TAK ↓
+9. Użytkownik wybiera typ biletu
+  ↓
+10. DECYZJA: Dodać opcję 3D?
+    ├─ TAK → System dodaje dekorator 3D (+5 zł)
+    └─ NIE ↓
+11. DECYZJA: Dodać zestaw przekąsek?
+    ├─ TAK → System dodaje dekorator przekąsek (+15 zł)
+    └─ NIE ↓
+12. System oblicza cenę (wzorzec Strategy)
+  ↓
+13. Wyświetla podsumowanie
+  ↓
+14. Użytkownik potwierdza rezerwację
+  ↓
+15. System zmienia stan miejsc na "Zarezerwowane" (wzorzec State)
+  ↓
+16. System zapisuje rezerwację do pliku JSON (wzorzec Singleton)
+  ↓
+17. Wyświetla potwierdzenie
+  ↓
+STOP
+
+ZASTOSOWANE WZORCE:
+- Decorator: ThreeDTicketDecorator, SnackComboTicketDecorator (kroki 10-11)
+- Strategy: PricingStrategy dla obliczania ceny (krok 12)
+- State: zmiana stanu miejsc FreeSeatState → ReservedSeatState (krok 15)
+- Singleton: Database do zapisu rezerwacji (krok 16)
+- Observer: powiadomienie o zmianie stanu miejsca (krok 15)
+
+INTERPRETACJA:
+Diagram pokazuje szczegółowy przepływ procesu rezerwacji z walidacją dostępności 
+miejsc i opcjonalnymi rozszerzeniami (3D, przekąski). Każdy krok jest zgodny 
+z implementacją w ReservationView i ReservationFacade.
+
+================================================================================
+5. DIAGRAM AKTYWNOŚCI - PRZEGLĄDANIE SEANSÓW
+   (diagram_aktywnosci_przegladanie_seansow.jpeg)
+================================================================================
+
+DEFINICJA:
+Diagram aktywności pokazujący proces przeglądania dostępnych seansów filmowych 
+w wybranym dniu.
+
+JAK ODCZYTYWAĆ:
+(Elementy jak w poprzednim diagramie aktywności)
+
+DODATKOWY ELEMENT:
+┌─────────────────────┐
+│ partition "Nazwa"   │ = grupowanie powiązanych działań
+│   ├─ Akcja 1        │
+│   └─ Akcja 2        │
+└─────────────────────┘
+
+PRZEPŁYW PRZEGLĄDANIA SEANSÓW:
+
+START
+  ↓
+1. Użytkownik otwiera aplikację
+  ↓
+2. Przechodzi do zakładki "Seanse"
+  ↓
+3. System pobiera listę sal z bazy danych (Singleton)
+  ↓
+4. System pobiera listę filmów z bazy danych (Singleton)
+  ↓
+5. Użytkownik wybiera datę z kalendarza
+  ↓
+6. System filtruje seanse według wybranej daty
+  ↓
+7. DECYZJA: Seanse dostępne?
+   ├─ NIE → Wyświetla komunikat "Brak seansów w wybranym dniu"
+   │         ↓
+   │         DECYZJA: Wybiera inną datę?
+   │         ├─ TAK → Wybiera nową datę z kalendarza → STOP
+   │         └─ NIE → Zamyka aplikację → STOP
+   │
+   └─ TAK ↓
+8. System wyświetla listę seansów
+  ↓
+9. PARTITION "Dla każdego seansu":
+   ├─ Wyświetla tytuł filmu
+   ├─ Wyświetla godzinę seansu
+   ├─ Wyświetla numer sali
+   ├─ Wyświetla cenę bazową
+   └─ Wyświetla liczbę wolnych miejsc
+  ↓
+10. Użytkownik przegląda seanse
+  ↓
+11. DECYZJA: Wybiera seans?
+    ├─ TAK → Przechodzi do widoku rezerwacji → STOP
+    └─ NIE ↓
+12. DECYZJA: Zmienia datę?
+    ├─ TAK → Wybiera nową datę → STOP
+    └─ NIE → Zamyka aplikację → STOP
+
+ZASTOSOWANE WZORCE:
+- Singleton: Database do pobierania danych (kroki 3-4, 6)
+- Builder: ScreeningBuilder użyty do tworzenia seansów (w tle)
+
+INTERPRETACJA:
+Diagram pokazuje proces przeglądania seansów z obsługą różnych scenariuszy:
+- Brak seansów w wybranym dniu
+- Wybór seansu i przejście do rezerwacji
+- Zmiana daty
+- Zamknięcie aplikacji
+
+Partition "Dla każdego seansu" pokazuje, że te operacje są wykonywane 
+dla każdego seansu na liście (pętla).
+
+================================================================================
+PODSUMOWANIE
+================================================================================
+
+DIAGRAM GANTTA:
+- Pokazuje KIEDY i JAK DŁUGO trwają zadania
+- Używany do planowania i monitorowania postępu projektu
+- 62 dni robocze, 3 fazy, szczegółowe podzadania
+
+DIAGRAM KLAS:
+- Pokazuje CO system zawiera (klasy, atrybuty, metody)
+- Używany do projektowania struktury systemu
+- 30 klas, 8 wzorców projektowych
+
+DIAGRAM PRZYPADKÓW UŻYCIA:
+- Pokazuje CO system robi z perspektywy użytkownika
+- Używany do zbierania wymagań funkcjonalnych
+- 13 przypadków użycia, 2 aktorów
+
+DIAGRAMY AKTYWNOŚCI:
+- Pokazują JAK system wykonuje konkretne funkcje
+- Używane do projektowania logiki biznesowej
+- 2 główne przepływy: rezerwacja i przeglądanie
+
+WSZYSTKIE DIAGRAMY RAZEM:
+Tworzą kompletną dokumentację projektu od planowania (Gantt), przez 
+projektowanie (Klasy, Przypadki Użycia), po szczegółową implementację 
+(Aktywności).
+
+================================================================================
+KONIEC INSTRUKCJI
+================================================================================

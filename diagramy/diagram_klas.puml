@@ -1,0 +1,315 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+' Models
+class Movie {
+  - title: str
+  - duration_minutes: int
+  - age_category: str
+  + __init__(title, duration_minutes, age_category)
+  + __str__(): str
+}
+
+class CinemaHall {
+  - name: str
+  - rows: int
+  - seats_per_row: int
+  + __init__(name, rows, seats_per_row)
+  + get_total_seats(): int
+  + __str__(): str
+}
+
+class Seat {
+  - row: int
+  - number: int
+  - _state: SeatState
+  - _observers: List[SeatObserver]
+  + __init__(row, number)
+  + state: SeatState
+  + reserve(): bool
+  + cancel(): bool
+  + sell(): bool
+  + is_available(): bool
+  + attach(observer)
+  + detach(observer)
+  + notify()
+  + __str__(): str
+}
+
+class Screening {
+  - movie: Movie
+  - cinema_hall: CinemaHall
+  - date_time: datetime
+  - base_price: float
+  - seats: List[Seat]
+  + __init__(movie, cinema_hall, date_time, base_price)
+  + _initialize_seats(): List[Seat]
+  + get_available_seats(): List[Seat]
+  + find_seat(row, number): Seat
+  + get_seat(row, number): Seat
+  + __str__(): str
+}
+
+class Ticket {
+  - screening: Screening
+  - seat: Seat
+  - price: float
+  + __init__(screening, seat, price)
+  + __str__(): str
+}
+
+class RegularTicket {
+}
+
+class DiscountedTicket {
+}
+
+class VIPTicket {
+}
+
+class Reservation {
+  - id: str
+  - customer_name: str
+  - screening: Screening
+  - seats: List[Seat]
+  - tickets: List[Ticket]
+  - timestamp: datetime
+  - total_price: float
+  + __init__(customer_name, screening, seats, tickets)
+  + __str__(): str
+  + to_dict(): dict
+  + {static} from_dict(data, db): Reservation
+}
+
+' Builder Pattern
+class ScreeningBuilder {
+  - movie: Movie
+  - cinema_hall: CinemaHall
+  - date_time: datetime
+  - base_price: float
+  + set_movie(movie): ScreeningBuilder
+  + set_cinema_hall(hall): ScreeningBuilder
+  + set_date_time(dt): ScreeningBuilder
+  + set_base_price(price): ScreeningBuilder
+  + build(): Screening
+}
+
+' Singleton Pattern
+class Database {
+  - {static} _instance: Database
+  - {static} _is_initialized: bool
+  - movies: List[Movie]
+  - cinema_halls: List[CinemaHall]
+  - screenings: List[Screening]
+  - reservations: List[Reservation]
+  + {static} __new__(): Database
+  + __init__()
+  + _initialize()
+  + add_movie(movie)
+  + add_cinema_hall(hall)
+  + add_screening(screening)
+  + add_reservation(reservation)
+  + get_movies(): List[Movie]
+  + get_cinema_halls(): List[CinemaHall]
+  + get_screenings(): List[Screening]
+  + get_reservations(): List[Reservation]
+  + get_screenings_for_date(date): List[Screening]
+  + save_reservations(filepath)
+  + load_reservations(filepath)
+  + find_screening(title, hall, datetime): Screening
+  + reset_all_seats()
+}
+
+' Factory Pattern
+abstract class TicketFactory {
+  + {abstract} create_ticket(screening, seat): Ticket
+}
+
+class RegularTicketFactory {
+  + create_ticket(screening, seat): Ticket
+}
+
+class DiscountedTicketFactory {
+  + create_ticket(screening, seat): Ticket
+}
+
+class VIPTicketFactory {
+  + create_ticket(screening, seat): Ticket
+}
+
+' Facade Pattern
+class ReservationFacade {
+  - database: Database
+  + __init__()
+  + get_available_screenings(date): List[Screening]
+  + get_available_seats(screening): List[Seat]
+  + calculate_price(screening, seats, factory): tuple
+  + make_reservation(name, screening, seats, tickets): Reservation
+  + get_all_reservations(): List[Reservation]
+  + get_available_ticket_options(screening): dict
+}
+
+' Decorator Pattern
+abstract class TicketDecorator {
+  - _ticket: Ticket
+  + __init__(ticket)
+  + price: float
+  + screening: Screening
+  + seat: Seat
+  + {abstract} __str__(): str
+}
+
+class ThreeDTicketDecorator {
+  + price: float
+  + __str__(): str
+}
+
+class SnackComboTicketDecorator {
+  + price: float
+  + __str__(): str
+}
+
+' Observer Pattern
+abstract class SeatObserver {
+  + {abstract} update(seat)
+}
+
+class SeatView {
+  + update(seat)
+}
+
+class SeatSubject {
+  - observers: List[SeatObserver]
+  + attach(observer)
+  + detach(observer)
+  + notify()
+}
+
+' State Pattern
+abstract class SeatState {
+  + {abstract} reserve(seat): bool
+  + {abstract} cancel(seat): bool
+  + {abstract} sell(seat): bool
+  + {abstract} is_available(): bool
+  + {abstract} __str__(): str
+}
+
+class FreeSeatState {
+  + reserve(seat): bool
+  + cancel(seat): bool
+  + sell(seat): bool
+  + is_available(): bool
+  + __str__(): str
+}
+
+class ReservedSeatState {
+  + reserve(seat): bool
+  + cancel(seat): bool
+  + sell(seat): bool
+  + is_available(): bool
+  + __str__(): str
+}
+
+class SoldSeatState {
+  + reserve(seat): bool
+  + cancel(seat): bool
+  + sell(seat): bool
+  + is_available(): bool
+  + __str__(): str
+}
+
+' Strategy Pattern
+abstract class PricingStrategy {
+  + {abstract} calculate_price(base_price): float
+}
+
+class RegularPricingStrategy {
+  + calculate_price(base_price): float
+}
+
+class WeekendPricingStrategy {
+  + calculate_price(base_price): float
+}
+
+class MorningPricingStrategy {
+  + calculate_price(base_price): float
+}
+
+class PricingContext {
+  - strategy: PricingStrategy
+  + __init__(strategy)
+  + set_strategy(strategy)
+  + calculate_price(base_price): float
+}
+
+' Views
+class MainWindow {
+  - movie_view: MovieView
+  - screening_view: ScreeningView
+  - reservation_view: ReservationView
+  + __init__()
+}
+
+class MovieView {
+  - database: Database
+  + display_movies()
+}
+
+class ScreeningView {
+  - database: Database
+  + display_screenings(date)
+}
+
+class ReservationView {
+  - facade: ReservationFacade
+  + select_seats(screening)
+  + confirm_reservation()
+}
+
+' Relationships
+Movie "1" -- "0..*" Screening
+CinemaHall "1" -- "0..*" Screening
+Screening "1" *-- "many" Seat
+Screening "1" -- "0..*" Ticket
+Seat "1" -- "0..*" Ticket
+Reservation "1" *-- "many" Ticket
+Reservation "1" -- "1" Screening
+
+Ticket <|-- RegularTicket
+Ticket <|-- DiscountedTicket
+Ticket <|-- VIPTicket
+
+TicketFactory <|-- RegularTicketFactory
+TicketFactory <|-- DiscountedTicketFactory
+TicketFactory <|-- VIPTicketFactory
+
+TicketDecorator <|-- ThreeDTicketDecorator
+TicketDecorator <|-- SnackComboTicketDecorator
+TicketDecorator --|> Ticket
+TicketDecorator o-- Ticket : wraps
+
+SeatObserver <|-- SeatView
+SeatSubject <|-- Seat
+
+SeatState <|-- FreeSeatState
+SeatState <|-- ReservedSeatState
+SeatState <|-- SoldSeatState
+Seat o-- SeatState
+
+PricingStrategy <|-- RegularPricingStrategy
+PricingStrategy <|-- WeekendPricingStrategy
+PricingStrategy <|-- MorningPricingStrategy
+PricingContext o-- PricingStrategy
+
+ScreeningBuilder ..> Screening : creates
+
+ReservationFacade --> Database
+ReservationFacade --> TicketFactory
+
+MainWindow *-- MovieView
+MainWindow *-- ScreeningView
+MainWindow *-- ReservationView
+
+ReservationView --> ReservationFacade
+
+@enduml
